@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseFolder;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,8 +24,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $baseFolders = BaseFolder::all();
         $data = [
-            'type_menu' => 'dashboard'
+            'type_menu' => 'dashboard',
+            'baseFolders' => $baseFolders
         ];
         return view('home', $data);
     }
