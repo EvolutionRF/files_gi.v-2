@@ -8,6 +8,7 @@ use App\Models\Permission;
 use Flasher\SweetAlert\Prime\SweetAlertFactory;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 
@@ -19,14 +20,16 @@ class FoldersController extends Controller
         $Folder = BaseFolder::where('slug', $slug)->first();
         $baseFolder = "";
         $permission = Permission::all();
+        $parents = array();
         if ($Folder) {
             // return response()->json('masuk');
             $access_folder = $Folder->base_folders_accesses;
-            $parents =
-                [
-                    'slug' => $Folder->slug,
-                    'name' => $Folder->name
-                ];
+            $parents[0] =  array(
+
+                'slug' => $Folder->slug,
+                'name' => $Folder->name
+
+            );
             // return response()->json($parents);
         } else {
             $Folder = Content::where('slug', $slug)->first();
@@ -35,7 +38,6 @@ class FoldersController extends Controller
 
             $result = $Folder->contentable;
             $count = 0;
-            $parents = array();
             do {
                 //
                 $parents[$count] = array(
@@ -56,7 +58,7 @@ class FoldersController extends Controller
             'type_menu' => 'dashboard',
             'parents' => $parents
         ];
-        // return response()->json($data);
+        // return response()->json($data['parents']['name']);
 
 
 

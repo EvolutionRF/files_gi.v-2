@@ -13,19 +13,22 @@
     <section class="section">
         <div class="section-header">
             <h1>{{ $content->name }}</h1>
-            {{--
+
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></div>
 
                 @foreach ($parents as $parent )
-                <div class="breadcrumb-item"><a href="{{ route('EnterFolder',$parent->slug) }}">{{ $parent->name }}</a>
+                @if($content->slug != $parent['slug'])
+                <div class="breadcrumb-item"><a href="{{ route('EnterFolder',$parent['slug']) }}">{{ $parent['name']
+                        }}</a>
                 </div>
+                @endif
                 @endforeach
-                <div class="breadcrumb-item"><a href="{{ route('EnterFilder', $Folder->slug) }}">{{ $content->name
+                <div class="breadcrumb-item"><a href="{{ route('EnterFolder', $content->slug) }}">{{ $content->name
                         }}</a>
                 </div>
 
-            </div> --}}
+            </div>
         </div>
         <div>
             <div class="form-group form-group-sm">
