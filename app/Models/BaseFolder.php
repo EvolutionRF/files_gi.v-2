@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class BaseFolder extends Model
 {
     use HasFactory;
-    protected $filable = ['name', 'owner_id', 'isPrivate', 'slug'];
+    protected $fillable = ['name', 'owner_id', 'isPrivate', 'slug'];
 
     public function base_folders_accesses()
     {
         return $this->hasMany(BaseFolderAccess::class, 'basefolder_id', 'id');
+    }
+    public function contents()
+    {
+        return $this->morphMany('App\Models\Content', 'contentable');
     }
 
     public function user()

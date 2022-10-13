@@ -22,5 +22,8 @@ Route::redirect('/', '/dashboard');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
 Route::get('/folders/{slug}', [App\Http\Controllers\FoldersController::class, 'EnterFolder'])->name('EnterFolder');
+Route::POST('/basefolder/create', [App\Http\Controllers\FoldersController::class, 'CreateBaseFolder'])->name('Basefolder.create');
 
-Route::resource('/admin/users', UsersController::class);
+Route::POST('/folder/create', [App\Http\Controllers\FoldersController::class, 'CreateFolder'])->name('folder.create');
+
+Route::resource('/admin/users', UsersController::class)->middleware('role:admin');

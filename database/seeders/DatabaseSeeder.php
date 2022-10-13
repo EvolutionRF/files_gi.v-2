@@ -115,13 +115,6 @@ class DatabaseSeeder extends Seeder
             'isPrivate' => 'public',
             'slug' => Str::random(30)
         ]);
-        if ($create) {
-            BaseFolderAccess::create([
-                'basefolder_id' => $create->id,
-                'permission_id' => '2',
-                'user_id' => $create->owner_id
-            ]);
-        }
 
         $create = BaseFolder::create([
             'name' => 'Base Folder 2',
@@ -129,13 +122,6 @@ class DatabaseSeeder extends Seeder
             'isPrivate' => 'private',
             'slug' => Str::random(30)
         ]);
-        if ($create) {
-            BaseFolderAccess::create([
-                'basefolder_id' => $create->id,
-                'permission_id' => '2',
-                'user_id' => $create->owner_id
-            ]);
-        }
 
         $create = BaseFolder::create([
             'name' => 'Base Folder 3',
@@ -143,13 +129,6 @@ class DatabaseSeeder extends Seeder
             'isPrivate' => 'public',
             'slug' => Str::random(30)
         ]);
-        if ($create) {
-            BaseFolderAccess::create([
-                'basefolder_id' => $create->id,
-                'permission_id' => '2',
-                'user_id' => $create->owner_id
-            ]);
-        }
 
         $create = BaseFolder::create([
             'name' => 'Base Folder 4',
@@ -158,11 +137,6 @@ class DatabaseSeeder extends Seeder
             'slug' => Str::random(30)
         ]);
         if ($create) {
-            BaseFolderAccess::create([
-                'basefolder_id' => $create->id,
-                'permission_id' => '2',
-                'user_id' => $create->owner_id
-            ]);
 
             BaseFolderAccess::create([
                 'basefolder_id' => $create->id,

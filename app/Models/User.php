@@ -57,4 +57,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Division::class);
     }
+
+    public function access()
+    {
+        return $this->hasMany(User::class, 'user_id', 'id');
+    }
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class, 'owner_id', 'id');
+    }
 }

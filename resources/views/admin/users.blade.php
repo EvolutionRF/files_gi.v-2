@@ -268,6 +268,7 @@
 @if($errors->any())
     $('#AddUser').modal('show');
 @endif
+
 function deleteUser(name,username,division,route) {
         var nameForm = document.querySelector('#nameDelete');
         var usernameForm = document.querySelector('#usernameDelete');

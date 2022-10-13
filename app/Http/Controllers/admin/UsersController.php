@@ -117,10 +117,10 @@ class UsersController extends Controller
     {
         // return response()->json($id);
         $delete = User::destroy($id);
-        if ($delete) {
-            $flasher->addSuccess('Data has been Delete successfully!');
-            // $flasher->iconColor('#ff0000');
-            return redirect()->route('users.index');
-        }
+        // if ($delete) {
+        $flasher->addSuccess('Data has been Delete successfully!');
+        // $flasher->iconColor('#ff0000');
+        return redirect()->route('users.index');
+        // }
     }
 }

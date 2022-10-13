@@ -1,4 +1,4 @@
-<div class="main-sidebar sidebar-style-2">
+<div class="main-sidebar sidebar-style-2 sidebar-mini main-sidebar:after">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a href="index.html">Stisla</a>
