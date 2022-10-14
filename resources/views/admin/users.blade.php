@@ -30,14 +30,17 @@
                     <div class="card-header-form col-12 my-auto">
                         <div class="input-group row d-flex justify-content-between ">
                             <div class="col-7 row d-flex align-items-center">
-                                <div class="form-group my-auto">
-                                    <select class="form-control">
-                                        <option>Show All</option>
-                                        @foreach ($divisions as $division)
-                                        <option value="{{ $division->id }}">{{ $division->name }}</option>
-                                        @endforeach>
-                                    </select>
-                                </div>
+                                <form action="{{ route('users.index') }}" method="get" id="select-division-form">
+                                    <div class="form-group my-auto">
+                                        <select class="form-control" id="division-filter" name="division">
+                                            <option value="0">Show All</option>
+                                            @foreach ($divisions as $division)
+                                            <option value="{{ $division->id }}" {{ ($division->id ==
+                                                $users[0]->division_id)?'selected':'' }}>{{ $division->name }}</option>
+                                            @endforeach>
+                                        </select>
+                                    </div>
+                                </form>
                                 <div class="ml-2">
                                     <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
                                         data-target="#AddUser"> + Add User
@@ -69,7 +72,8 @@
                                     </tr>
                                     @foreach($users as $user)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}
+                                        </td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->username }}</td>
                                         <td>{{ @ $user->division->name }}</td>
@@ -88,8 +92,16 @@
                             </div>
                         </div>
                         <div class="card-footer row d-flex justify-content-between ">
-                            <div>
-                                <p>Showing 1 to 5 of 389 entries</p>
+                            <p>Showing 1 to
+                                @if($users->perPage()>= $users->total())
+                                {{ $users->total() }}
+                                @else
+                                {{ $users->perPage() }}
+                                @endif
+                                of {{ $users->total() }} entries</p>
+                            {{ $users->links() }}
+
+                            {{-- <div>
                             </div>
                             <div>
                                 <nav class="d-inline-block">
@@ -109,7 +121,7 @@
                                         </li>
                                     </ul>
                                 </nav>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -265,9 +277,11 @@
     });
 });
 
+// Show Modal with Error
 @if($errors->any())
     $('#AddUser').modal('show');
 @endif
+
 
 function deleteUser(name,username,division,route) {
         var nameForm = document.querySelector('#nameDelete');
@@ -280,6 +294,18 @@ function deleteUser(name,username,division,route) {
         divisionForm.value = division;
         formDelete.action = route;
 }
+        const selectDivisionForm = document.querySelector('#select-division-form')
+        const selectDivisionInput = document.querySelector('#division-filter')
+
+        selectDivisionInput.addEventListener('input', e => {
+            console.log()
+            if (selectDivisionInput.value != 0) {
+                selectDivisionForm.submit()
+            }else{
+                window.location.assign('{{ route('users.index') }}')
+            }
+        })
+
 
 
 </script>

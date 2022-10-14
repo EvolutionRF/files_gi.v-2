@@ -6,6 +6,39 @@
 <!-- CSS Libraries -->
 <link rel="stylesheet" href="{{ asset('library/jqvmap/dist/jqvmap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.min.css') }}">
+
+
+<style>
+    .modal-dialog-right {
+        position: fixed;
+        margin: auto;
+        width: 20%;
+        height: 100%;
+        right: 0px;
+    }
+
+    .modal-content-right {
+        height: auto;
+        min-height: 100%;
+        border-radius: 0;
+    }
+
+    .modal.right_modal .modal-dialog-right {
+        /* position: fixed; */
+        /* margin: auto; */
+        /* width: 32%; */
+        height: 100%;
+        -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+        transform: translate3d(0%, 0, 0);
+        transition: 300ms;
+    }
+
+    .fade {
+        transition: opacity .20s ease-in-out;
+    }
+</style>
 @endpush
 
 @section('main')
@@ -80,6 +113,11 @@
                                             <x-heroicon-s-ellipsis-vertical style="width:15px" />
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right ml-0">
+                                            <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
+                                                data-target="#Sidebar-Modal">
+                                                <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
+                                                Detail
+                                            </a>
                                             <a type="button" class="dropdown-item has-icon pl-2">
                                                 <x-heroicon-s-cog-8-tooth style="width:15px" class="ml-0" /> Manage
                                             </a>
@@ -162,7 +200,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="formPrivate" style="display: none">
                         <h6>Invite User</h6>
                         <div class="form-group">
                             <div class="input-group mb-3">
@@ -202,7 +240,24 @@
 </div>
 {{-- End Create Folder Modal --}}
 
+{{-- Side Bar modal --}}
+<div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal">
+    <div class="modal-dialog modal-dialog-right" role="document">
+        <div class="modal-content modal-content-right">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail | Activity</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
+            </div>
+
+        </div>
+    </div>
+</div>
+{{-- End Side Bar modal --}}
 
 @endsection
 
@@ -239,7 +294,28 @@
         // usernameForm.value = username;
         parentSlug.value = slug;
         formCreate.action = route;
-}
+
+        const radioButtons = document.querySelectorAll('input[name="isPrivate"]');
+        const privateForm = document.querySelector('#formPrivate');
+            for (const radioButton of radioButtons) {
+                radioButton.addEventListener('change', showSelected);
+            }
+        function showSelected(e) {
+            // console.log(e);
+            if (this.checked) {
+                console.log(this.value)
+                if (this.value=='private') {
+                    // console.log('milih Private boy');
+                    privateForm.style.display = 'block';
+                }else{
+                    // console.log('Milih Public boy');
+                    privateForm.style.display='none';
+                }
+            }
+        }
+    }
+
+
 </script>
 
 <!-- JS Libraies -->

@@ -18,10 +18,16 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $users = User::all();
+
+        if ($request->division) {
+            // return response()->json($request->division);
+            $users = User::where('division_id', $request->division)->fastPaginate(50);
+        } else {
+            $users = User::fastPaginate(50);
+        }
         $divisions = Division::all();
 
         $data = [
@@ -30,7 +36,7 @@ class UsersController extends Controller
             'type_menu' => 'Data Users'
         ];
         // $datas =  ['data' => $data];
-        // return response()->json($datas);
+        // return response()->json($data);
 
         return view('admin.users', $data);
     }

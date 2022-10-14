@@ -289,7 +289,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="formPrivate" style="display: none">
                         <h6>Invite User</h6>
                         <div class="form-group">
                             <div class="input-group mb-3">
@@ -316,7 +316,6 @@
                         </div>
                     </div>
                     <div class="text-right">
-
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Create</button>
                     </div>
@@ -334,73 +333,13 @@
     <div class="modal-dialog modal-dialog-right" role="document">
         <div class="modal-content modal-content-right">
             <div class="modal-header">
-                <h5 class="modal-title">Create Folder</h5>
+                <h5 class="modal-title">Detail | Activity</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('Basefolder.create') }}" method="POST">
-                    @csrf
 
-                    <div class="form-group">
-                        <h6>Folder Name</h6>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-folder-plus"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="name" name="name">
-                        </div>
-                    </div>
-                    <div class="access-radio">
-                        <h6>General Access</h6>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate1" name="isPrivate" class="custom-control-input"
-                                value="public" checked>
-                            <label class="custom-control-label" for="isPrivate1">Public</label>
-                            <p>This project would be available to anyone who has the link</p>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate2" name="isPrivate" class="custom-control-input"
-                                value="private">
-                            <label class="custom-control-label" for="isPrivate2">Privates</label>
-                            <p>Only people with access can open with the link</p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <h6>Invite User</h6>
-                        <div class="form-group">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">Access</button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">View</a>
-                                        <a class="dropdown-item" href="#">Manage</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <h6>Generate Password</h6>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="button">Generate</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-right">
-
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-
-                </form>
             </div>
 
         </div>
@@ -415,10 +354,10 @@
 @push('scripts')
 <Script>
     function cardClick(target) {
-        var get = '#'+target;
+        const get = '#'+target;
         console.log(get);
-        var targetChange = document.querySelector(get);
-        var otherCard = document.querySelector('.cardClick');
+        const targetChange = document.querySelector(get);
+        const otherCard = document.querySelector('.cardClick');
         const collection = document.getElementsByClassName("cardClick");
         for (let i = 0; i < collection.length; i++) {
             collection[i].classList.remove('card-primary');
@@ -432,9 +371,29 @@
 
 
     function newtab(route) {
-        console.log(route);
         window.location.assign(route);
     }
+
+        const radioButtons = document.querySelectorAll('input[name="isPrivate"]');
+        const privateForm = document.querySelector('#formPrivate');
+            for (const radioButton of radioButtons) {
+                radioButton.addEventListener('change', showSelected);
+            }
+        function showSelected(e) {
+            // console.log(e);
+            if (this.checked) {
+                console.log(this.value)
+                if (this.value=='private') {
+                    // console.log('milih Private boy');
+                    privateForm.style.display = 'block';
+                }else{
+                    // console.log('Milih Public boy');
+                    privateForm.style.display='none';
+                }
+            }
+        }
+
+
 </Script>
 <!-- JS Libraies -->
 <script src="{{ asset('library/simpleweather/jquery.simpleWeather.min.js') }}"></script>

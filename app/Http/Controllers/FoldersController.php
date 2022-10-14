@@ -84,14 +84,17 @@ class FoldersController extends Controller
                         // $message = 'Masuk Ke ' . $Folder->name . " Sebagai " . auth()->user()->name;
                         // return response()->json($message);
                     } else {
-                        foreach ($access_folder as $access) { //perulangan untuk mengambil data yang memiliki akses ke folder
-                            if (auth()->user()->id == $access->user_id) { //jika ditemukan maka akan bisa masuk
-                                // // Enter Content Have Access
-                                // $message = ' Masuk Ke ' . $Folder->name . " Sebagai " . auth()->user()->name;
-                                // return response()->json($message);
-                                return view('folders', $data);
+                        if ($access_folder) {
+                            foreach ($access_folder as $access) { //perulangan untuk mengambil data yang memiliki akses ke folder
+                                if (auth()->user()->id == $access->user_id) { //jika ditemukan maka akan bisa masuk
+                                    // // Enter Content Have Access
+                                    // $message = ' Masuk Ke ' . $Folder->name . " Sebagai " . auth()->user()->name;
+                                    // return response()->json($message);
+                                    return view('folders', $data);
+                                }
                             }
                         }
+
                         $message = 'Izin masuk ke' . $Folder->name . " Sebagai " . auth()->user()->name . " Ditolak" . ", Silahkan Request Akses";
                         return response()->json($message);
                     }
@@ -136,6 +139,7 @@ class FoldersController extends Controller
         $content->owner_id = auth()->user()->id; //mengisi owner_id dengan user yang login
         $content->slug = Str::random(32); //mengisi slug dengan $slugContent
         $content->basefolder_id = $baseFolder_id; //mengisi basefolder_id dengan $baseFolder
+        $content->isPrivate = $request->isPrivate;
         $data = [
             'parent' => $parent,
             'content' => $content
