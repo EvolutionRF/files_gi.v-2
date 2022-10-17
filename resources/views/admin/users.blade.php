@@ -76,7 +76,8 @@
                                         <td>{{ $user->getRoleNames()[0] }}</td>
                                         <td>
                                             <button class="btn fas fa-pen-square text-success"
-                                                onclick="editUser('{{ $user->name }}','{{ $user->username }}','{{ @$user->division->name }}')"></button>
+                                                onclick="editUser('{{ $user->name }}','{{ $user->username }}','{{ @$user->division_id }}','{{ route('users.update',$user->id) }}')"
+                                                data-toggle="modal" data-target="#editUser"></button>
                                             <a class="btn  fas fa-key text-primary"></a>
                                             <button class="btn fas fa-trash text-danger"
                                                 onclick="deleteUser('{{ $user->name }}','{{ $user->username }}','{{ @$user->division_id }}','{{ route('users.destroy',$user->id) }}')"
@@ -196,6 +197,66 @@
 </div>
 {{-- End Modal --}}
 
+{{-- Modal Edit Data Users --}}
+<div class="modal fade" tabindex="-1" role="dialog" id="editUser" name="editUser">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="dropdown-divider"></div>
+
+            <form action="" method="POST" id="editForm" name="editForm" novalidate>
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control @error('nameEdit') is-invalid @enderror" id="nameEdit" name="nameEdit" value="{{ old('nameEdit') }}" required>
+                        @error('nameEdit')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control @error('usernameEdit') is-invalid @enderror" id="usernameEdit" name="usernameEdit" value="{{ old('usernameEdit') }}" readonly>
+                        @error('usernameEdit')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Divisi</label>
+                        <select class="form-control @error('divisionEdit') is-invalid @enderror" id="divisionEdit" name="divisionEdit" value="{{ old('divisionEdit') }}" required>
+                            <option hidden value="">Select Divisi</option>
+                            @foreach ($divisions as $division)
+                            <option value="{{ $division->id }}">{{
+                                $division->name }}</option>
+                            @endforeach>
+                        </select>
+                        @error('divisionEdit')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <p class="text-center">Are you sure update the entire data?</p>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- End Modal --}}
 
 {{-- Modal Delete Data Users --}}
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteUser" name="deleteUser">
@@ -265,9 +326,12 @@
     });
 });
 
-@if($errors->any())
+@if($errors->first('name')||$errors->first('username')||$errors->first('divisions'))
     $('#AddUser').modal('show');
+@elseif($errors->first('nameEdit')||$errors->first('usernameEdit')||$errors->first('divisionsEdit'))
+    $('#editUser').modal('show');
 @endif
+
 function deleteUser(name,username,division,route) {
         var nameForm = document.querySelector('#nameDelete');
         var usernameForm = document.querySelector('#usernameDelete');
@@ -280,6 +344,17 @@ function deleteUser(name,username,division,route) {
         formDelete.action = route;
 }
 
+function editUser(name,username,division,route) {
+    var nameForm = document.querySelector('#nameEdit');
+    var usernameForm = document.querySelector('#usernameEdit');
+    var divisionForm = document.querySelector('#divisionEdit');
+    var formEdit = document.querySelector('#editForm');
+
+    nameForm.value = name;
+    usernameForm.value = username;
+    divisionForm.value = division;
+    formEdit.action = route;
+}
 
 </script>
 
