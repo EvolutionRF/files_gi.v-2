@@ -6,6 +6,8 @@
 <!-- CSS Libraries -->
 <link rel="stylesheet" href="{{ asset('library/jqvmap/dist/jqvmap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.min.css') }}">
+
+
 @endpush
 
 @section('main')
@@ -20,9 +22,13 @@
             </div> --}}
         </div>
 
-        {{-- @if($errors)
-        <div class="error">{{ $errors->first('username') }}</div>
-        @endif --}}
+        @if ($errors->any())
+        @foreach ($errors->all() as $error)
+        <div>{{$error}}</div>
+        @endforeach
+        @endif
+
+
         <div class="section-body">
             <h2 class="section-title">Manage Data Users</h2>
             <div class="card">
@@ -51,7 +57,7 @@
                             <div class="search-element">
                                 <form action="">
                                     <input class="form-control selectric" type="search" placeholder="Search"
-                                        aria-label="Search">
+                                        aria-label="Search" name="search" id="search">
                                 </form>
                             </div>
                         </div>
@@ -61,7 +67,7 @@
                     <div class="card">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table-striped table-md table text-center">
+                                <table class="table-striped table-md table text-center" id="example">
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
@@ -101,27 +107,6 @@
                                 of {{ $users->total() }} entries</p>
                             {{ $users->links() }}
 
-                            {{-- <div>
-                            </div>
-                            <div>
-                                <nav class="d-inline-block">
-                                    <ul class="pagination mb-0">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" tabindex="-1"><i
-                                                    class="fas fa-chevron-left"></i></a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1 <span
-                                                    class="sr-only">(current)</span></a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -278,8 +263,10 @@
 });
 
 // Show Modal with Error
-@if($errors->any())
+@if($errors->first('name')||$errors->first('username')||$errors->first('divisions'))
     $('#AddUser').modal('show');
+@elseif($errors->first('nameEdit')||$errors->first('usernameEdit')||$errors->first('divisionsEdit'))
+    $('#editUser').modal('show');
 @endif
 
 
@@ -319,6 +306,8 @@ function deleteUser(name,username,division,route) {
 {{-- <script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script> --}}
 <script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
 <script src="{{ asset('js/page/bootstrap-modal.js') }}"></script>
+
+
 
 
 <!-- Page Specific JS File -->

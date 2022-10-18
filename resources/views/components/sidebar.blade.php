@@ -16,6 +16,10 @@
                 </a>
             </li>
         </ul>
+
+        @guest
+
+        @else
         <ul class="sidebar-menu">
             <li class="{{ $type_menu === 'myFiles' ? 'active' : '' }}">
                 <a class="nav-link" href="">
@@ -52,5 +56,8 @@
             </li>
         </ul>
         @endrole
+
+        @endguest
+
     </aside>
 </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', $Folder->name)
 
 @push('style')
 <!-- CSS Libraries -->
@@ -45,19 +45,19 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>{{ $content->name }}</h1>
+            <h1>{{ $Folder->name }}</h1>
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></div>
 
                 @foreach ($parents as $parent )
-                @if($content->slug != $parent['slug'])
+                @if($Folder->slug != $parent['slug'])
                 <div class="breadcrumb-item"><a href="{{ route('EnterFolder',$parent['slug']) }}">{{ $parent['name']
                         }}</a>
                 </div>
                 @endif
                 @endforeach
-                <div class="breadcrumb-item"><a href="{{ route('EnterFolder', $content->slug) }}">{{ $content->name
+                <div class="breadcrumb-item"><a href="{{ route('EnterFolder', $Folder->slug) }}">{{ $Folder->name
                         }}</a>
                 </div>
 
@@ -72,26 +72,41 @@
                         </div>
                     </div>
                     <input type="search" class="form-control">
-                    <button class="btn btn-primary btn-sm btn-icon" data-toggle="modal" data-target="#TambahFolder"
-                        onclick="createContent('{{ $content->slug }}','{{ route('folder.create') }}')">
-                        <x-heroicon-s-plus style="width:15px" />
-                        <span>
-                            Create
-                        </span>
-                    </button>
+
+                    <div class="navbar-nav">
+
+                        <li class="dropdown">
+                            <button class="btn btn-primary btn-sm btn-icon" data-toggle="dropdown"
+                                class="nav-link nav-link-lg nav-link-user p-0" style="height: 42px">
+                                <x-heroicon-s-plus style="width:15px" />
+                                <span>
+                                    Create
+                                </span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right ml-0">
+                                <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
+                                    data-target="#TambahFolder"
+                                    onclick="createContent('{{ $Folder->slug }}','{{ route('folder.create') }}')">
+                                    <x-heroicon-s-folder-open style="width:15px" class="ml-0" />
+                                    Folder
+                                </a>
+                                <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
+                                    data-target="#TambahFile"
+                                    onclick="createContentFile('{{ $Folder->slug }}','{{ route('file.upload') }}')">
+                                    <x-heroicon-s-document style="width:15px" class="ml-0" /> File
+                                </a>
+                            </div>
+                        </li>
+                    </div>
                 </div>
             </div>
 
         </div>
 
 
-        <h2 class="section-title row">
-            Folder
-        </h2>
-
         <div class="row sortable-card">
-            @foreach($content->contents as $content)
-            <div class="col-12 col-md-6 col-lg-4">
+            @foreach($content_folder as $content)
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="card card-secondary cardClick" id="card-{{ $content->id }}"
                     onclick="cardClick('card-{{ $content->id }}')" style="cursor: pointer"
                     ondblclick="newtab('{{ route('EnterFolder',$content->slug) }}')">
@@ -158,6 +173,35 @@
             @endforeach
         </div>
     </section>
+
+    <div class="">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table-striped table-md table" id="example">
+                    <tr class="text-bold">
+                        <th>Nama</th>
+                        <th>Owner</th>
+                        <th>Last Modify</th>
+                        <th>Access</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    @foreach($content_file as $file)
+                    <tr>
+                        <td>
+                            <x-heroicon-s-document style="width:15px" class="ml-0" /> {{ $file->name }}
+                        </td>
+                        <td>{{ $file->user->name }}</td>
+                        <td>x</td>
+                        <td>{{ $file->isPrivate }}</td>
+                        <td class="text-center">
+                            x
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{-- Create Folder Modal --}}
@@ -195,7 +239,7 @@
                         <div class="custom-control custom-radio">
                             <input type="radio" id="isPrivate2" name="isPrivate" class="custom-control-input"
                                 value="private">
-                            <label class="custom-control-label" for="isPrivate2">Privates</label>
+                            <label class="custom-control-label" for="isPrivate2">Private</label>
                             <p>Only people with access can open with the link</p>
                         </div>
                     </div>
@@ -259,6 +303,85 @@
 </div>
 {{-- End Side Bar modal --}}
 
+
+{{-- Modal tambah file start --}}
+<div class="modal fade" tabindex="-1" role="dialog" id="TambahFile">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data" id="formUpload">
+                    @csrf
+                    <input type="text" name="FileparentSlug" id="FileparentSlug" hidden value="">
+                    <div class="form-group">
+                        <h6>File Title</h6>
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" name="file">
+                            <label class="custom-file-label" for="customFile">Upload File</label>
+                        </div>
+                    </div>
+                    <div class="access-radio mt-2">
+                        <h6>General Access</h6>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="FileisPrivate1" name="FileisPrivate" class="custom-control-input"
+                                value="public" checked>
+                            <label class="custom-control-label" for="FileisPrivate1">Public</label>
+                            <p>This project would be available to anyone who has the link</p>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="FileisPrivate2" name="FileisPrivate" class="custom-control-input"
+                                value="private">
+                            <label class="custom-control-label" for="FileisPrivate2">Private</label>
+                            <p>Only people with access can open with the link</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="formFilePrivate" style="display: none">
+                        <h6>Invite User</h6>
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="" aria-label="">
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">Access</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">View</a>
+                                        <a class="dropdown-item" href="#">Manage</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h6>Generate Password</h6>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="" aria-label="">
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="button">Generate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- Modal tambah file end --}}
+
 @endsection
 
 @push('scripts')
@@ -298,9 +421,9 @@
         const radioButtons = document.querySelectorAll('input[name="isPrivate"]');
         const privateForm = document.querySelector('#formPrivate');
             for (const radioButton of radioButtons) {
-                radioButton.addEventListener('change', showSelected);
+                radioButton.addEventListener('change', showSelectedFolder);
             }
-        function showSelected(e) {
+        function showSelectedFolder(e) {
             // console.log(e);
             if (this.checked) {
                 console.log(this.value)
@@ -314,6 +437,39 @@
             }
         }
     }
+
+    function createContentFile(slug,route) {
+        var formCreate =document.querySelector('#formUpload');
+        var FileparentSlug = document.querySelector('#FileparentSlug');
+
+        // console.log(slug);
+        // nameForm.value = name;
+        // usernameForm.value = username;
+        FileparentSlug.value = slug;
+        formCreate.action = route;
+
+        console.log(FileparentSlug);
+
+        const FileradioButtons = document.querySelectorAll('input[name="FileisPrivate"]');
+        const privateFileForm = document.querySelector('#formFilePrivate');
+            for (const FileradioButton of FileradioButtons) {
+                FileradioButton.addEventListener('change', showSelectedFile);
+            }
+        function showSelectedFile(e) {
+            if (this.checked) {
+                console.log(this.value)
+                if (this.value=='private') {
+                    // console.log('milih Private boy');
+                    privateFileForm.style.display = 'block';
+                }else{
+                    // console.log('Milih Public boy');
+                    privateFileForm.style.display='none';
+                }
+            }
+        }
+    }
+
+
 
 
 </script>

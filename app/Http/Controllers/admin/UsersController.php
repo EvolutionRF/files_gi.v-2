@@ -20,8 +20,6 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-
-
         if ($request->division) {
             // return response()->json($request->division);
             $users = User::where('division_id', $request->division)->fastPaginate(50);
@@ -39,6 +37,31 @@ class UsersController extends Controller
         // return response()->json($data);
 
         return view('admin.users', $data);
+    }
+
+    public function search(Request $request)
+    {
+        $output = '';
+        if ($request->ajax()) {
+            $users = User::where('name', 'LIKE', '%' . $request->search . '%')->orWhere('username', 'LIKE', '%' . $request->search . '%')->get();
+            if ($users) {
+                foreach ($users as $user) {
+                    $output .=
+                        '<td>' .  '1' . '</td>
+                        <td>' . $user->name . '</td>
+                        <td>' . $user->username . '</td>
+                        <td>' . @$user->division->name . '</td>
+                        <td>' . $user->getRoleNames()[0] . '</td>
+                        <td>
+                        <button class="btn fas fa-pen-square text-success" onclick="editUser(' . $user->name . ',' . $user->username . ',' . @$user->division->name . ')"></button>
+                         <a class="btn  fas fa-key text-primary"></a>
+                        <button class="btn fas fa-trash text-danger" onclick="deleteUser(' . $user->name . ',' . $user->username . ',' . @$user->division_id . ',' . route('users.destroy', $user->id) . ')" data-toggle="modal" data-target="#deleteUser"></button>
+                        </td>';
+                }
+                return response()->json($output);
+            }
+        }
+        return view('admin.users');
     }
 
     /**

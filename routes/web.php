@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\UsersController;
+use App\Http\Controllers\FilesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +28,5 @@ Route::POST('/basefolder/create', [App\Http\Controllers\FoldersController::class
 Route::POST('/folder/create', [App\Http\Controllers\FoldersController::class, 'CreateFolder'])->name('folder.create');
 
 Route::resource('/admin/users', UsersController::class)->middleware('role:admin');
+
+Route::POST('/file/upload', [App\Http\Controllers\FilesController::class, 'upload'])->name('file.upload');
