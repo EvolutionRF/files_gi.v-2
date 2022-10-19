@@ -194,36 +194,16 @@
                         <td>x</td>
                         <td>{{ $file->isPrivate }}</td>
                         <td class="text-center">
-                            <a href="" data-toggle="dropdown" class="nav-link nav-link-lg nav-link-user p-0">
-                                <x-heroicon-s-ellipsis-vertical style="width:15px" />
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right ml-0">
-                                <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target="#Sidebar-Modal-File">
-                                    <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
-                                    Detail
-                                </a>
-                                <a type="button" class="dropdown-item has-icon pl-2">
-                                    <x-heroicon-s-cog-8-tooth style="width:15px" class="ml-0" /> Manage
-                                </a>
-                                <a type="button" class="dropdown-item has-icon pl-2">
-                                    <x-heroicon-s-arrow-path style="width:15px" class="ml-0" /> Update
-                                </a>
-                                <a type="button" class="dropdown-item has-icon pl-2">
-                                    <x-heroicon-s-pencil-square style="width:15px" class="ml-0" />
-                                    Rename
-                                </a>
-                                <a type="button" class="dropdown-item has-icon pl-2">
-                                    <x-heroicon-s-trash style="width:15px" class="ml-0" /> Delete
-                                </a>
-                            </div>
-                            </li>
+                            <button class="btn btn-info" data-toggle="modal"
+                                data-target="#Sidebar-Modal-File">Detail</button>
+                        </td>
                     </tr>
                     @endforeach
                 </table>
             </div>
         </div>
     </div>
+
 </div>
 
 {{-- Create Folder Modal --}}
@@ -306,7 +286,7 @@
 </div>
 {{-- End Create Folder Modal --}}
 
-{{-- Side Bar modal Folder--}}
+{{-- Side Bar modal --}}
 <div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-Folder">
     <div class="modal-dialog modal-dialog-right" role="document">
         <div class="modal-content modal-content-right">
@@ -351,7 +331,8 @@
         </div>
     </div>
 </div>
-{{-- End Side Bar modal Folder --}}
+{{-- End Side Bar modal --}}
+
 
 {{-- Side Bar Modal File --}}
 <div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-File">
@@ -384,13 +365,61 @@
                         <div class="fileproperties">
                             <h6>File Properties</h6>
                             <div class="d-flex justify-content-between">
-                                <div class="status" style="padding-top:30px; padding-left: 10px; padding-right:40px;">
-                                    <p class="type-status" style="line-height: 0%;">Type</p>
-                                    <p class="owner-status">Status</p>
+                                <div class="status">
+                                    <ul>
+                                        <li style="list-style: none;">Storage Used</li>
+                                        <li style="list-style: none;">Type</li>
+                                        <li style="list-style: none;">Owner</li>
+                                    </ul>
                                 </div>
-                                <div class="body" style="padding-top:30px;">
-                                    <p class="type-status" style="line-height: 0%;">Folder</p>
-                                    <p class="owner-status">Yoga</p>
+                                <div class="detail">
+                                    <ul>
+                                        <li style="list-style: none;">100 MB</li>
+                                        <li style="list-style: none;">Docx</li>
+                                        <li style="list-style: none;">Yoga</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+                        <div class="card-body">
+                            <p style="margin: 20px;"><i class="fas fa-file"></i> Brief terupdate.docx</p>
+                        </div>
+                        <div class="card">
+                            <div class="dropdown" style="margin-bottom: 20px;">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="triggerId"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Today
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="triggerId">
+                                    <a class="dropdown-item" href="#">Today</a>
+                                    <a class="dropdown-item" href="#">Yesterday</a>
+                                    <a class="dropdown-item" href="#">Last Week</a>
+                                    <a class="dropdown-item" href="#">Last Month</a>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="card">
+                                <div class="d-flex justify-content-between"
+                                    style="padding-left:10px; padding-right:10px;">
+                                    <p class="jam">5.05 PM</p>
+                                    <p class="status-activity">Updated File</p>
+                                </div>
+                                <div style="padding-left: 10px; padding-right: 10px;">
+                                    <p class="owner" style="line-height: 0%;">Yoga</p>
+                                    <p class="file"><i class="fas fa-file"></i> Brief terupdate.docx</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="d-flex justify-content-between"
+                                    style="padding-left:10px; padding-right:10px;">
+                                    <p class="jam">4.05 PM</p>
+                                    <p class="status-activity">Updated File</p>
+                                </div>
+                                <div style="padding-left: 10px; padding-right: 10px;">
+                                    <p class="owner" style="line-height: 0%;">Yoga</p>
+                                    <p class="file"><i class="fas fa-file"></i> Brief terupdate.docx</p>
                                 </div>
                             </div>
                         </div>
@@ -402,7 +431,6 @@
     </div>
 </div>
 {{-- End Side Bar Modal File --}}
-
 
 
 {{-- Modal tambah file start --}}

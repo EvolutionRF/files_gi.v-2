@@ -121,6 +121,7 @@ class FoldersController extends Controller
         ];
         $doneCreate = BaseFolder::create($data);
         if ($doneCreate) {
+            activity()->causedBy(auth()->user())->performedOn($doneCreate)->log('Create Base Folder');
             $flasher->addSuccess('Folder has been Create successfully!');
             return redirect()->route('dashboard');
         }
@@ -149,8 +150,9 @@ class FoldersController extends Controller
             'parent' => $parent,
             'content' => $content
         ];
-        $doneCreateBaseFolder = $parent->contents()->save($content);
-        if ($doneCreateBaseFolder) {
+        $doneCreateFolder = $parent->contents()->save($content);
+        if ($doneCreateFolder) {
+            activity()->causedBy(auth()->user())->performedOn($doneCreateFolder)->log('Create Folder');
             $flasher->addSuccess('Folder has been Create successfully!');
             return redirect()->route('EnterFolder', $request->parentSlug);
         }
