@@ -194,7 +194,8 @@
                         <td>x</td>
                         <td>{{ $file->isPrivate }}</td>
                         <td class="text-center">
-                            x
+                            <button class="btn btn-info" data-toggle="modal"
+                                data-target="#Sidebar-Modal-File">Detail</button>
                         </td>
                     </tr>
                     @endforeach
@@ -331,6 +332,7 @@
 </div>
 {{-- End Side Bar modal --}}
 
+
 {{-- Side Bar Modal File --}}
 <div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-File">
     <div class="modal-dialog modal-dialog-right" role="document">
@@ -341,23 +343,25 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <div class="card-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab"
-                            aria-controls="details" aria-selected="true">Details</a>
+                        <a class="nav-link active" id="detail-tab" data-toggle="tab" href="#detail" role="tab"
+                            aria-controls="detail" aria-selected="true">Details</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab"
                             aria-controls="activity" aria-selected="false">Activity</a>
                     </li>
+
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                    <div class="tab-pane fade show active" id="detail" role="tabpanel" aria-labelledby="detail-tab">
                         <div class="card-body">
                             <p style="margin: 20px;"><i class="fas fa-file"></i> Brief terupdate.docx</p>
                         </div>
-                        <div class="details">
+                        <div class="fileproperties">
                             <h6>File Properties</h6>
                             <div class="d-flex justify-content-between">
                                 <div class="status">
@@ -421,11 +425,11 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 {{-- End Side Bar Modal File --}}
-
 
 
 {{-- Modal tambah file start --}}

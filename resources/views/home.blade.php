@@ -329,7 +329,7 @@
 </div>
 {{-- End Create Folder Modal --}}
 
-{{-- Side Bar Modal --}}
+{{-- Side Bar Modal Folder--}}
 <div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-Folder">
     <div class="modal-dialog modal-dialog-right" role="document">
         <div class="modal-content modal-content-right">
@@ -374,7 +374,9 @@
         </div>
     </div>
 </div>
-{{-- End Side Bar Modal --}}
+{{-- End Side Bar Modal Folder --}}
+
+
 
 
 
