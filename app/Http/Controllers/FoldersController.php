@@ -12,9 +12,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 
+
 class FoldersController extends Controller
 {
-    public function EnterFolder($slug)
+    public function EnterFolder($slug, SweetAlertFactory $flasher)
     {
         // $baseFolder = BaseFold;
         $Folder = BaseFolder::where('slug', $slug)->first();
@@ -53,18 +54,19 @@ class FoldersController extends Controller
         $data = [
             'baseFolder' => $baseFolder,
             'Folders_accesses' => $access_folder,
-            'content' => $Folder,
+            'Folder' => $Folder,
+            'content_folder' => $Folder->contents->where('type', 'folder'),
+            'content_file' => $Folder->contents->where('type', 'file'),
             'permission' => $permission,
             'type_menu' => 'dashboard',
             'parents' => $parents
         ];
-        // return response()->json($data['parents']['name']);
+        // return response()->json($data);
 
 
 
         if (auth()->user()) {
             if (auth()->user()->getRoleNames()->first() == "admin") { //Check apakah yang masuk rolenya admin
-                $message = 'Masuk Ke ' . $Folder->name;
                 // return response()->json($message);
 
 
@@ -95,13 +97,16 @@ class FoldersController extends Controller
                             }
                         }
 
-                        $message = 'Izin masuk ke' . $Folder->name . " Sebagai " . auth()->user()->name . " Ditolak" . ", Silahkan Request Akses";
-                        return response()->json($message);
+
+                        $flasher->addError('You Dont have access');
+                        return redirect()->route('dashboard');
                     }
                 }
             }
         } else {
-            return response()->json("Masukan Password atau Login");
+
+            $flasher->addError('You Dont have access');
+            return redirect()->route('dashboard');
         }
     }
 
