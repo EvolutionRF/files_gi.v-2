@@ -204,7 +204,7 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right ml-0">
                                                     <a type="button" class="dropdown-item has-icon pl-2"
-                                                        data-toggle="modal" data-target="#Sidebar-Modal-Folder">
+                                                        data-toggle="modal" data-target="#Sidebar-Modal-File">
                                                         <x-heroicon-s-information-circle style="width:15px"
                                                             class="ml-0" />
                                                         Detail
@@ -359,7 +359,8 @@
                                 <h6>Folder Properties</h6>
                                 <div class="col-6">
                                     <div class="d-flex justify-content-between">
-                                        <div class="status" style="padding-top:30px; padding-left: 10px; padding-right:40px;">
+                                        <div class="status"
+                                            style="padding-top:30px; padding-left: 10px; padding-right:40px;">
                                             <p class="type-status" style="line-height: 0%;">Type</p>
                                             <p class="owner-status">Status</p>
                                         </div>
@@ -376,7 +377,7 @@
             </div>
         </div>
     </div>
-    {{-- End Side Bar Modal File --}}
+    {{-- End Side Bar Modal Folder --}}
 
     {{-- Side Bar Modal File --}}
     <div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-File">
@@ -388,24 +389,26 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="card-body">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details"
-                                role="tab" aria-controls="details" aria-selected="true">Details</a>
+                            <a class="nav-link active" id="detail-tab" data-toggle="tab" href="#detail" role="tab"
+                                aria-controls="detail" aria-selected="true">Details</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="activity-tab" data-toggle="tab" href="#activity" role="tab"
                                 aria-controls="activity" aria-selected="false">Activity</a>
                         </li>
+
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="details" role="tabpanel"
-                            aria-labelledby="details-tab">
+                        <div class="tab-pane fade show active" id="detail" role="tabpanel"
+                            aria-labelledby="detail-tab">
                             <div class="card-body">
                                 <p style="margin: 20px;"><i class="fas fa-file"></i> Brief terupdate.docx</p>
                             </div>
-                            <div class="details">
+                            <div class="fileproperties">
                                 <h6>File Properties</h6>
                                 <div class="d-flex justify-content-between">
                                     <div class="status">
@@ -469,6 +472,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
