@@ -330,79 +330,47 @@
 {{-- End Create Folder Modal --}}
 
 {{-- Side Bar Modal --}}
-<div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal">
+<div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-Folder">
     <div class="modal-dialog modal-dialog-right" role="document">
         <div class="modal-content modal-content-right">
             <div class="modal-header">
-                <h5 class="modal-title">Create Folder</h5>
+                <h5 class="modal-title">Details Folder</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form action="{{ route('Basefolder.create') }}" method="POST">
-                    @csrf
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab"
+                            aria-controls="details" aria-selected="true">Details</a>
+                    </li>
+                </ul>
 
-                    <div class="form-group">
-                        <h6>Folder Name</h6>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-folder-plus"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="name" name="name">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                        <div class="card-body">
+                            <p style="margin: 20px;"><i class="fas fa-folder"></i> Base Folder 1</p>
                         </div>
-                    </div>
-                    <div class="access-radio">
-                        <h6>General Access</h6>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate1" name="isPrivate" class="custom-control-input"
-                                value="public" checked>
-                            <label class="custom-control-label" for="isPrivate1">Public</label>
-                            <p>This project would be available to anyone who has the link</p>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate2" name="isPrivate" class="custom-control-input"
-                                value="private">
-                            <label class="custom-control-label" for="isPrivate2">Privates</label>
-                            <p>Only people with access can open with the link</p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <h6>Invite User</h6>
-                        <div class="form-group">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">Access</button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">View</a>
-                                        <a class="dropdown-item" href="#">Manage</a>
+                        <div class="details">
+                            <h6>Folder Properties</h6>
+                            <div class="col-6">
+                                <div class="d-flex justify-content-between">
+                                    <div class="status"
+                                        style="padding-top:30px; padding-left: 10px; padding-right:40px;">
+                                        <p class="type-status" style="line-height: 0%;">Type</p>
+                                        <p class="owner-status">Status</p>
+                                    </div>
+                                    <div class="body" style="padding-top:30px;">
+                                        <p class="type-status" style="line-height: 0%;">Folder</p>
+                                        <p class="owner-status">Yoga</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <h6>Generate Password</h6>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="button">Generate</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="text-right">
-
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-
-                </form>
+                </div>
             </div>
-
         </div>
     </div>
 </div>
