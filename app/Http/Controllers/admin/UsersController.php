@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Division;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -94,6 +95,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+     //   
     }
 
     /**
@@ -103,15 +105,30 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id, UpdateUserRequest $request, SweetAlertFactory $flasher)
     {
+        // return response()->json($request->name);
+        $user = User::findOrFail($id);
         $data = [
-            'request' => $request->all(),
-            'id' => $id
+            'name' => $request->nameEdit,
+            'username' => $request->usernameEdit,
+            'division_id' => $request->divisionEdit
         ];
+        // return response()->json($data);
+        // $data = ([
+        //     'name' => 'required|string',
+        //     'username' => 'readonly|string',
+        //     'division_id' => 'required|string'
+        // ]);
 
-        return response()->json($data);
+        $user->update($data);
+        // if ($user) {
+            $flasher->addSuccess('Data has been update successfully!');
+            // $flasher->iconColor('#ff000');
+            return redirect()->route('users.index');
+        // }
     }
+    
 
     /**
      * Remove the specified resource from storage.
