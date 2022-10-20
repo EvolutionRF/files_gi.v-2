@@ -27,6 +27,10 @@ Route::POST('/basefolder/create', [App\Http\Controllers\FoldersController::class
 
 Route::POST('/folder/create', [App\Http\Controllers\FoldersController::class, 'CreateFolder'])->name('folder.create');
 
+Route::PUT('/folder/update/{id}', [App\Http\Controllers\FoldersController::class, 'renameBaseFolder'])->name('Basefolder.rename');
+Route::DELETE('/folder/delete/{id}', [App\Http\Controllers\FoldersController::class, 'DeleteBaseFolder'])->name('Basefolder.delete');
+
+
 Route::resource('/admin/users', UsersController::class)->middleware('role:admin');
 
 Route::POST('/file/upload', [App\Http\Controllers\FilesController::class, 'upload'])->name('file.upload');

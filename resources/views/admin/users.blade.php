@@ -333,10 +333,10 @@
 @endif
 
 function deleteUser(name,username,division,route) {
-        var nameForm = document.querySelector('#nameDelete');
-        var usernameForm = document.querySelector('#usernameDelete');
-        var divisionForm = document.querySelector('#divisionDelete');
-        var formDelete =document.querySelector('#deleteForm');
+        const nameForm = document.querySelector('#nameDelete');
+        const usernameForm = document.querySelector('#usernameDelete');
+        const divisionForm = document.querySelector('#divisionDelete');
+        const formDelete =document.querySelector('#deleteForm');
 
         nameForm.value = name;
         usernameForm.value = username;
@@ -357,10 +357,10 @@ function deleteUser(name,username,division,route) {
 
 
 function editUser(name,username,division,route) {
-    var nameForm = document.querySelector('#nameEdit');
-    var usernameForm = document.querySelector('#usernameEdit');
-    var divisionForm = document.querySelector('#divisionEdit');
-    var formEdit = document.querySelector('#editForm');
+    const nameForm = document.querySelector('#nameEdit');
+    const usernameForm = document.querySelector('#usernameEdit');
+    const divisionForm = document.querySelector('#divisionEdit');
+    const formEdit = document.querySelector('#editForm');
 
     nameForm.value = name;
     usernameForm.value = username;

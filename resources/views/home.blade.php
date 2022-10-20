@@ -174,11 +174,9 @@
 
         </div>
 
-
         <h2 class="section-title row">
             Base Folder
         </h2>
-
         <div class="row sortable-card">
             @foreach ($baseFolders as $baseFolder)
             <div class="col-12 col-md-6 col-lg-4">
@@ -204,7 +202,8 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right ml-0">
                                             <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                                data-target="#Sidebar-Modal-Folder">
+                                                data-target="#Sidebar-Modal-Folder"
+                                                onclick="SideBarBaseFolder('{{ $baseFolder->name }}', '{{ $baseFolder->isPrivate}}','{{ $baseFolder->user->name }}','{{ $baseFolder->getDate }}')">
                                                 <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
                                                 Detail
                                             </a>
@@ -212,15 +211,15 @@
                                                 <x-heroicon-s-cog-8-tooth style="width:15px" class="ml-0" />
                                                 Manage
                                             </a>
-                                            <a type="button" class="dropdown-item has-icon pl-2">
-                                                <x-heroicon-s-arrow-path style="width:15px" class="ml-0" />
-                                                Update
-                                            </a>
-                                            <a type="button" class="dropdown-item has-icon pl-2">
+                                            <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
+                                                data-target="#RenameFolder"
+                                                onclick="renameBaseFolder('{{ $baseFolder->name }}','{{ route('Basefolder.rename', $baseFolder->id) }}')">
                                                 <x-heroicon-s-pencil-square style="width:15px" class="ml-0" />
                                                 Rename
                                             </a>
-                                            <a type="button" class="dropdown-item has-icon pl-2">
+                                            <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
+                                                data-target="#DeleteBaseFolder"
+                                                onclick="DeleteBaseFolder('{{ route('Basefolder.delete',$baseFolder->id) }}')">
                                                 <x-heroicon-s-trash style="width:15px" class="ml-0" /> Delete
                                             </a>
                                         </div>
@@ -264,7 +263,6 @@
             <div class="modal-body">
                 <form action="{{ route('Basefolder.create') }}" method="POST">
                     @csrf
-
                     <div class="form-group">
                         <h6>Folder Name</h6>
                         <div class="input-group mb-2">
@@ -330,84 +328,115 @@
 {{-- End Create Folder Modal --}}
 
 {{-- Side Bar Modal --}}
-<div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal">
+<div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-Folder">
     <div class="modal-dialog modal-dialog-right" role="document">
         <div class="modal-content modal-content-right">
             <div class="modal-header">
-                <h5 class="modal-title">Create Folder</h5>
+                <h5 class="modal-title">Details Folder</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form action="{{ route('Basefolder.create') }}" method="POST">
-                    @csrf
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab"
+                            aria-controls="details" aria-selected="true">Details</a>
+                    </li>
+                </ul>
 
-                    <div class="form-group">
-                        <h6>Folder Name</h6>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-folder-plus"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="name" name="name">
-                        </div>
-                    </div>
-                    <div class="access-radio">
-                        <h6>General Access</h6>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate1" name="isPrivate" class="custom-control-input"
-                                value="public" checked>
-                            <label class="custom-control-label" for="isPrivate1">Public</label>
-                            <p>This project would be available to anyone who has the link</p>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate2" name="isPrivate" class="custom-control-input"
-                                value="private">
-                            <label class="custom-control-label" for="isPrivate2">Privates</label>
-                            <p>Only people with access can open with the link</p>
-                        </div>
-                    </div>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                        <div class="card-body">
 
-                    <div class="form-group">
-                        <h6>Invite User</h6>
-                        <div class="form-group">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">Access</button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">View</a>
-                                        <a class="dropdown-item" href="#">Manage</a>
+                            <p style="margin: 20px;" id="FolderName"> </p>
+                        </div>
+                        <div class="details">
+                            <h6>Folder Properties</h6>
+                            <div class="col-6">
+                                <div class="d-flex justify-content-between">
+
+
+
+
+                                    <div class="status"
+                                        style="padding-top:30px; padding-left: 10px; padding-right:20px;">
+                                        <p class="type-status" style="line-height: 0%;">Type</p>
+                                        <p class="owner-status mb-0">Owner</p>
+                                        <p class="created-status">Created at</p>
+                                    </div>
+                                    <div class="body" style="padding-top:30px;">
+                                        <p class="type-status" style="line-height: 0%;" id="typeFolder"></p>
+                                        <p class="owner-status mb-0" id="ownerFolder"></p>
+                                        <p class="created-status" id="created_status"></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <h6>Generate Password</h6>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="button">Generate</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="text-right">
-
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-
-                </form>
+                </div>
             </div>
-
         </div>
     </div>
 </div>
 {{-- End Side Bar Modal --}}
 
+{{-- Modal rename folder start --}}
+<div class="modal fade" tabindex="-1" role="dialog" id="RenameFolder">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rename Folder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" method="Post" id="FormrenameBaseFolder">
+                <div class="modal-body">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <h6>File Title</h6>
+                        <input type="text" class="form-control" name="NameRenameBaseFolder" id="NameRenameBaseFolder">
+                    </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Rename</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- Modal rename folder end --}}
+
+{{-- Modal delete data start --}}
+<div class="modal fade" tabindex="-1" role="dialog" id="DeleteBaseFolder">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Folder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" method="POST" id="formDeleteBaseFolder">
+                @csrf
+                @method('DELETE')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <p>Are you sure to delete the Folder ?</p>
+                    </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- Modal delete data end --}}
 
 
 @endsection
@@ -435,6 +464,35 @@
         console.log(route);
         window.location.assign(route);
     }
+
+    function renameBaseFolder (name,route) {
+        const renameName = document.querySelector('#NameRenameBaseFolder')
+        const renameForm = document.querySelector('#FormrenameBaseFolder')
+        renameName.value = name;
+        renameForm.action = route;
+    }
+
+    function DeleteBaseFolder (route) {
+        const deleteForm = document.querySelector('#formDeleteBaseFolder')
+        deleteForm.action = route;
+    }
+
+    function SideBarBaseFolder (name,isPrivate,userName,created_at) {
+        const folderName = document.querySelector('#FolderName');
+        const typeFolder = document.querySelector('#typeFolder');
+        const ownerFolder = document.querySelector('#ownerFolder');
+        const create_status = document.querySelector('#created_status');
+
+
+
+        typeFolder.innerHTML = isPrivate;
+        ownerFolder.innerHTML = userName;
+        folderName.innerHTML = '<i class="fas fa-folder"></i> '+ name;
+        create_status.innerHTML = created_at;
+
+    }
+
+
 </Script>
 <!-- JS Libraies -->
 <script src="{{ asset('library/simpleweather/jquery.simpleWeather.min.js') }}"></script>

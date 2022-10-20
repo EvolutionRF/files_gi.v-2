@@ -31,7 +31,7 @@ class FilesController extends Controller
 
         $doneUploadFile = $parent->contents()->save($content);
         if ($doneUploadFile) {
-            if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            if ($request->hasFile('file')) {
                 $done = $doneUploadFile->addMediaFromRequest('file')->toMediaCollection('file');
                 if ($done) {
                     activity()->causedBy(auth()->user())->performedOn($doneUploadFile)->log('Upload File');
