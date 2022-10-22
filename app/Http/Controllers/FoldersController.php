@@ -27,10 +27,8 @@ class FoldersController extends Controller
             // return response()->json('masuk');
             $access_folder = $Folder->base_folders_accesses;
             $parents[0] =  array(
-
                 'slug' => $Folder->slug,
                 'name' => $Folder->name
-
             );
             // return response()->json($parents);
         } else {
@@ -146,10 +144,7 @@ class FoldersController extends Controller
 
     public function renameBaseFolder(Request $request, $id, SweetAlertFactory $flasher)
     {
-
         $baseFolder = BaseFolder::findOrFail($id);
-
-        // return response()->json($request);
         $data = [
             'name' => $request->NameRenameBaseFolder,
         ];
@@ -161,8 +156,10 @@ class FoldersController extends Controller
         }
     }
 
-    public function manageBaseFolder()
+    public function manageBaseFolder(Request $request, $id, SweetAlertFactory $flasher)
     {
+
+        dd($request);
     }
 
 
@@ -178,8 +175,6 @@ class FoldersController extends Controller
         } else {
             $baseFolder_id = $parent->id;
         }
-        // return response()->json($parent);
-        // dd($parent);
         $content = new Content(); //bikin object content
         $content->name = $request->get('name'); // mengisi content->name dengan request name
         $content->type = 'folder'; //mengisi content->type dengan folder
