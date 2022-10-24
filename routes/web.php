@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\FilesController;
+use App\Http\Controllers\FoldersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,3 +38,5 @@ Route::DELETE('/folder/delete/{id}', [App\Http\Controllers\FoldersController::cl
 Route::resource('/admin/users', UsersController::class)->middleware('role:admin');
 
 Route::POST('/file/upload', [App\Http\Controllers\FilesController::class, 'upload'])->name('file.upload');
+
+Route::get('/basefolder/show/{id}', [FoldersController::class, 'show'])->name('basefolder.show');

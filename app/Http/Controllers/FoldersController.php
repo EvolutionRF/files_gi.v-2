@@ -200,4 +200,12 @@ class FoldersController extends Controller
     public function updateFolder()
     {
     }
+
+    public function show($id)
+    {
+        $folder = BaseFolder::findOrFail($id);
+        $url = route('dashboard');
+
+        return view('folder.show-base-folder', compact('folder', 'url'));
+    }
 }

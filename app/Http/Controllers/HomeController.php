@@ -26,13 +26,13 @@ class HomeController extends Controller
     {
         $baseFolders = BaseFolder::with(['base_folders_accesses.user' => function ($query) {
             $query->select('id', 'name');
-        }])->get();
+        }])->latest()->paginate(3);
         $data = [
             'type_menu' => 'dashboard',
             'baseFolders' => $baseFolders
         ];
         // $test = $baseFolders;
         // return response()->json($baseFolders);
-        return view('home', $data);
+        return view('dashboard.index', $data);
     }
 }

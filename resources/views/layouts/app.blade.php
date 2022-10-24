@@ -65,6 +65,19 @@
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+    <script>
+        jQuery(document).ready(function($) {
+            $(".show-modal").on("show.bs.modal", (event) => {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                var title = button.data('title');
+                var url = button.data('url');
+
+                modal.find(".modal-title-custom").html(title);
+                modal.find(".modal-body-custom").load(url);
+            });
+        });
+    </script>
 </body>
 
 </html>
