@@ -21,6 +21,7 @@ class FoldersController extends Controller
         // $baseFolder = BaseFold;
         $Folder = BaseFolder::where('slug', $slug)->first();
         $baseFolder = "";
+
         $permission = Permission::all();
         $parents = array();
         if ($Folder) {
