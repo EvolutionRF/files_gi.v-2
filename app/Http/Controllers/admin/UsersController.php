@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Division;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,10 +19,14 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
-        $users = User::all();
+        if ($request->division) {
+            // return response()->json($request->division);
+            $users = User::where('division_id', $request->division)->fastPaginate(50);
+        } else {
+            $users = User::fastPaginate(50);
+        }
         $divisions = Division::all();
 
         $data = [
@@ -30,9 +35,34 @@ class UsersController extends Controller
             'type_menu' => 'Data Users'
         ];
         // $datas =  ['data' => $data];
-        // return response()->json($datas);
+        // return response()->json($data);
 
         return view('admin.users', $data);
+    }
+
+    public function search(Request $request)
+    {
+        $output = '';
+        if ($request->ajax()) {
+            $users = User::where('name', 'LIKE', '%' . $request->search . '%')->orWhere('username', 'LIKE', '%' . $request->search . '%')->get();
+            if ($users) {
+                foreach ($users as $user) {
+                    $output .=
+                        '<td>' .  '1' . '</td>
+                        <td>' . $user->name . '</td>
+                        <td>' . $user->username . '</td>
+                        <td>' . @$user->division->name . '</td>
+                        <td>' . $user->getRoleNames()[0] . '</td>
+                        <td>
+                        <button class="btn fas fa-pen-square text-success" onclick="editUser(' . $user->name . ',' . $user->username . ',' . @$user->division->name . ')"></button>
+                         <a class="btn  fas fa-key text-primary"></a>
+                        <button class="btn fas fa-trash text-danger" onclick="deleteUser(' . $user->name . ',' . $user->username . ',' . @$user->division_id . ',' . route('users.destroy', $user->id) . ')" data-toggle="modal" data-target="#deleteUser"></button>
+                        </td>';
+                }
+                return response()->json($output);
+            }
+        }
+        return view('admin.users');
     }
 
     /**
@@ -88,6 +118,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+     //   
     }
 
     /**
@@ -97,15 +128,30 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id, UpdateUserRequest $request, SweetAlertFactory $flasher)
     {
+        // return response()->json($request->name);
+        $user = User::findOrFail($id);
         $data = [
-            'request' => $request->all(),
-            'id' => $id
+            'name' => $request->nameEdit,
+            'username' => $request->usernameEdit,
+            'division_id' => $request->divisionEdit
         ];
+        // return response()->json($data);
+        // $data = ([
+        //     'name' => 'required|string',
+        //     'username' => 'readonly|string',
+        //     'division_id' => 'required|string'
+        // ]);
 
-        return response()->json($data);
+        $user->update($data);
+        // if ($user) {
+            $flasher->addSuccess('Data has been update successfully!');
+            // $flasher->iconColor('#ff000');
+            return redirect()->route('users.index');
+        // }
     }
+    
 
     /**
      * Remove the specified resource from storage.

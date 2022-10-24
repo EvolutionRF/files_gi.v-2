@@ -6,6 +6,8 @@
 <!-- CSS Libraries -->
 <link rel="stylesheet" href="{{ asset('library/jqvmap/dist/jqvmap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.min.css') }}">
+
+
 @endpush
 
 @section('main')
@@ -20,9 +22,13 @@
             </div> --}}
         </div>
 
-        {{-- @if($errors)
-        <div class="error">{{ $errors->first('username') }}</div>
-        @endif --}}
+        @if ($errors->any())
+        @foreach ($errors->all() as $error)
+        <div>{{$error}}</div>
+        @endforeach
+        @endif
+
+
         <div class="section-body">
             <h2 class="section-title">Manage Data Users</h2>
             <div class="card">
@@ -30,14 +36,17 @@
                     <div class="card-header-form col-12 my-auto">
                         <div class="input-group row d-flex justify-content-between ">
                             <div class="col-7 row d-flex align-items-center">
-                                <div class="form-group my-auto">
-                                    <select class="form-control">
-                                        <option>Show All</option>
-                                        @foreach ($divisions as $division)
-                                        <option value="{{ $division->id }}">{{ $division->name }}</option>
-                                        @endforeach>
-                                    </select>
-                                </div>
+                                <form action="{{ route('users.index') }}" method="get" id="select-division-form">
+                                    <div class="form-group my-auto">
+                                        <select class="form-control" id="division-filter" name="division">
+                                            <option value="0">Show All</option>
+                                            @foreach ($divisions as $division)
+                                            <option value="{{ $division->id }}" {{ ($division->id ==
+                                                $users[0]->division_id)?'selected':'' }}>{{ $division->name }}</option>
+                                            @endforeach>
+                                        </select>
+                                    </div>
+                                </form>
                                 <div class="ml-2">
                                     <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
                                         data-target="#AddUser"> + Add User
@@ -48,7 +57,7 @@
                             <div class="search-element">
                                 <form action="">
                                     <input class="form-control selectric" type="search" placeholder="Search"
-                                        aria-label="Search">
+                                        aria-label="Search" name="search" id="search">
                                 </form>
                             </div>
                         </div>
@@ -58,7 +67,7 @@
                     <div class="card">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table-striped table-md table text-center">
+                                <table class="table-striped table-md table text-center" id="example">
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
@@ -69,14 +78,16 @@
                                     </tr>
                                     @foreach($users as $user)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}
+                                        </td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->username }}</td>
                                         <td>{{ @ $user->division->name }}</td>
                                         <td>{{ $user->getRoleNames()[0] }}</td>
                                         <td>
                                             <button class="btn fas fa-pen-square text-success"
-                                                onclick="editUser('{{ $user->name }}','{{ $user->username }}','{{ @$user->division->name }}')"></button>
+                                                onclick="editUser('{{ $user->name }}','{{ $user->username }}','{{ @$user->division_id }}','{{ route('users.update',$user->id) }}')"
+                                                data-toggle="modal" data-target="#editUser"></button>
                                             <a class="btn  fas fa-key text-primary"></a>
                                             <button class="btn fas fa-trash text-danger"
                                                 onclick="deleteUser('{{ $user->name }}','{{ $user->username }}','{{ @$user->division_id }}','{{ route('users.destroy',$user->id) }}')"
@@ -88,28 +99,15 @@
                             </div>
                         </div>
                         <div class="card-footer row d-flex justify-content-between ">
-                            <div>
-                                <p>Showing 1 to 5 of 389 entries</p>
-                            </div>
-                            <div>
-                                <nav class="d-inline-block">
-                                    <ul class="pagination mb-0">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" tabindex="-1"><i
-                                                    class="fas fa-chevron-left"></i></a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1 <span
-                                                    class="sr-only">(current)</span></a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">2</a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            <p>Showing 1 to
+                                @if($users->perPage()>= $users->total())
+                                {{ $users->total() }}
+                                @else
+                                {{ $users->perPage() }}
+                                @endif
+                                of {{ $users->total() }} entries</p>
+                            {{ $users->links() }}
+
                         </div>
                     </div>
                 </div>
@@ -196,6 +194,69 @@
 </div>
 {{-- End Modal --}}
 
+{{-- Modal Edit Data Users --}}
+<div class="modal fade" tabindex="-1" role="dialog" id="editUser" name="editUser">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="dropdown-divider"></div>
+
+            <form action="" method="POST" id="editForm" name="editForm" novalidate>
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control @error('nameEdit') is-invalid @enderror" id="nameEdit"
+                            name="nameEdit" value="{{ old('nameEdit') }}" required>
+                        @error('nameEdit')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control @error('usernameEdit') is-invalid @enderror"
+                            id="usernameEdit" name="usernameEdit" value="{{ old('usernameEdit') }}" readonly>
+                        @error('usernameEdit')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Divisi</label>
+                        <select class="form-control @error('divisionEdit') is-invalid @enderror" id="divisionEdit"
+                            name="divisionEdit" value="{{ old('divisionEdit') }}" required>
+                            <option hidden value="">Select Divisi</option>
+                            @foreach ($divisions as $division)
+                            <option value="{{ $division->id }}">{{
+                                $division->name }}</option>
+                            @endforeach>
+                        </select>
+                        @error('divisionEdit')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <p class="text-center">Are you sure update the entire data?</p>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- End Modal --}}
 
 {{-- Modal Delete Data Users --}}
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteUser" name="deleteUser">
@@ -265,22 +326,47 @@
     });
 });
 
-@if($errors->any())
+@if($errors->first('name')||$errors->first('username')||$errors->first('divisions'))
     $('#AddUser').modal('show');
+@elseif($errors->first('nameEdit')||$errors->first('usernameEdit')||$errors->first('divisionsEdit'))
+    $('#editUser').modal('show');
 @endif
 
 function deleteUser(name,username,division,route) {
-        var nameForm = document.querySelector('#nameDelete');
-        var usernameForm = document.querySelector('#usernameDelete');
-        var divisionForm = document.querySelector('#divisionDelete');
-        var formDelete =document.querySelector('#deleteForm');
+        const nameForm = document.querySelector('#nameDelete');
+        const usernameForm = document.querySelector('#usernameDelete');
+        const divisionForm = document.querySelector('#divisionDelete');
+        const formDelete =document.querySelector('#deleteForm');
 
         nameForm.value = name;
         usernameForm.value = username;
         divisionForm.value = division;
         formDelete.action = route;
 }
+        const selectDivisionForm = document.querySelector('#select-division-form')
+        const selectDivisionInput = document.querySelector('#division-filter')
 
+        selectDivisionInput.addEventListener('input', e => {
+            console.log()
+            if (selectDivisionInput.value != 0) {
+                selectDivisionForm.submit()
+            }else{
+                window.location.assign('{{ route('users.index') }}')
+            }
+        })
+
+
+function editUser(name,username,division,route) {
+    const nameForm = document.querySelector('#nameEdit');
+    const usernameForm = document.querySelector('#usernameEdit');
+    const divisionForm = document.querySelector('#divisionEdit');
+    const formEdit = document.querySelector('#editForm');
+
+    nameForm.value = name;
+    usernameForm.value = username;
+    divisionForm.value = division;
+    formEdit.action = route;
+}
 
 </script>
 
