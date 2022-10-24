@@ -23,4 +23,9 @@ class BaseFolder extends Model
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
     }
+
+    public function getGetDateAttribute()
+    {
+        return date('d-M-Y', strtotime($this->created_at));
+    }
 }

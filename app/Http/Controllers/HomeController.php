@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -24,11 +24,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $baseFolders = BaseFolder::all();
+        $baseFolders = BaseFolder::with(['base_folders_accesses.user' => function ($query) {
+            $query->select('id', 'name');
+        }])->get();
         $data = [
             'type_menu' => 'dashboard',
             'baseFolders' => $baseFolders
         ];
+        // $test = $baseFolders;
+        // return response()->json($baseFolders);
         return view('home', $data);
     }
 }
