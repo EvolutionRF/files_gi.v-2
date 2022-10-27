@@ -1,6 +1,6 @@
 <form action="{{ $url }}">
     <div class="form-group">
-        <label for="">Judul</label>
+        <label for="">Tester</label>
         <input type="text" class="form-control">
     </div>
 

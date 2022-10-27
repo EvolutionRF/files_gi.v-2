@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     @stack('style')
 
     <!-- Template CSS -->
@@ -50,7 +49,6 @@
             @include('components.footer')
         </div>
     </div>
-
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('library/popper.js/dist/umd/popper.js') }}"></script>
@@ -59,6 +57,7 @@
     <script src="{{ asset('library/jquery.nicescroll/dist/jquery.nicescroll.min.js') }}"></script>
     <script src="{{ asset('library/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
+
 
     @stack('scripts')
 
@@ -76,7 +75,21 @@
                 modal.find(".modal-title-custom").html(title);
                 modal.find(".modal-body-custom").load(url);
             });
+
+            $(".right_modal").on("show.bs.modal", (event) => {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                var title = button.data('title');
+                var url = button.data('url');
+
+                modal.find(".modal-title-custom").html(title);
+                modal.find(".modal-body-custom").load(url);
+            });
+
+
         });
+
+
     </script>
 </body>
 
