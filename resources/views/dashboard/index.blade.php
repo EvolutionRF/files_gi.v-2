@@ -81,18 +81,19 @@
             <div class="col-12 col-md-6 col-lg-4">
 
                 <div class="card card-secondary cardClick" id="card-{{ $baseFolder->id }}"
-                    onclick="cardClick('card-{{ $baseFolder->id }}')" style="cursor: pointer"
-                    ondblclick="newtab('{{ route('EnterFolder', $baseFolder->slug) }}')">
+                    onclick="cardClick('card-{{ $baseFolder->id }}')" style="cursor: pointer">
                     <div class="card-logo p-3">
                         <div class="d-flex justify-content-between">
-                            <div class="d-flex text-primary">
-                                <div class="my-auto">
-                                    <x-heroicon-s-folder-open style="width:40px" />
+                            <a href="{{ route('EnterFolder', $baseFolder->slug) }}">
+                                <div class="d-flex text-primary">
+                                    <div class="my-auto">
+                                        <x-heroicon-s-folder-open style="width:40px" />
+                                    </div>
+                                    <div class="my-auto ml-3 d-inline-block">
+                                        <p class="mt-2 text-base">{{ $baseFolder->name }}</p>
+                                    </div>
                                 </div>
-                                <div class="my-auto ml-3 d-inline-block">
-                                    <h6 class="mt-2 text-dark">{{ $baseFolder->name }}</h6>
-                                </div>
-                            </div>
+                            </a>
                             <div class="text-left">
                                 <ul class="navbar-nav">
                                     <li class="dropdown">
@@ -127,6 +128,15 @@
                                                 <x-heroicon-s-trash style="width:15px" class="ml-0" /> Delete
                                             </a>
                                             @else
+                                            <?php $param = "" ?>
+                                            @foreach($baseFolder->base_folders_accesses as $haveAccess)
+                                            @if($haveAccess->user_id== auth()->user()->id)
+                                            <?php $param = "ada" ?>
+                                            @endif
+                                            @endforeach
+                                            @if($baseFolder->isPrivate=='private')
+                                            @if($param)
+                                            @else
                                             <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
                                                 data-target=".show-modal" data-title="Ask Request"
                                                 data-url="{{ route('request',$baseFolder->id) }}">
@@ -134,7 +144,8 @@
                                                 Ask Request
                                             </a>
                                             @endif
-
+                                            @endif
+                                            @endif
                                         </div>
                                     </li>
                                 </ul>
@@ -173,11 +184,6 @@
 
 @push('scripts')
 <script>
-    function newtab(route) {
-        console.log(route);
-        window.location.assign(route);
-    }
-
     function cardClick(target) {
             var get = '#' + target;
             console.log(get);

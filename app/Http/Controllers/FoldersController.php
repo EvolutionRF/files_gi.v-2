@@ -262,11 +262,6 @@ class FoldersController extends Controller
 
     public function storeManage(Request $request, $id, SweetAlertFactory $flasher)
     {
-        //     $accessBase = BaseFolderAccess::where('basefolder_id', $id)->get();
-        //     // dd($accessBase)
-        //     return response()->json($accessBase);
-
-
         $baseFolder = BaseFolder::findOrFail($id);
         $data = [
             'isPrivate' => $request->isPrivate
