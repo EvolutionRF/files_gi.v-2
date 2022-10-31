@@ -31,8 +31,6 @@ class HomeController extends Controller
             'type_menu' => 'dashboard',
             'baseFolders' => $baseFolders
         ];
-        // $test = $baseFolders;
-        // return response()->json($baseFolders);
         return view('dashboard.index', $data);
     }
 }

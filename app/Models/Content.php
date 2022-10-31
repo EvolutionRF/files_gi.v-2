@@ -10,6 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Content extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
+    protected $fillable = ['name', 'isPrivate'];
 
     public function user()
     {
@@ -28,6 +29,6 @@ class Content extends Model implements HasMedia
 
     public function access()
     {
-        return $this->hasMany(Access::class, 'content_id', 'id');
+        return $this->hasMany(ContentAccess::class, 'content_id', 'id');
     }
 }

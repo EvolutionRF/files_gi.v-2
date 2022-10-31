@@ -4,22 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Permission;
 
-class BaseFolderAccess extends Model
+class ContentAccess extends Model
 {
-    protected $table = 'base_folders_accesses';
-    protected $fillable = ['basefolder_id', 'permission_id', 'user_id', 'status'];
     use HasFactory;
+    protected $table = 'accesses';
+    protected $fillable = ['content_id', 'permission_id', 'user_id', 'status'];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function basefolder()
+    public function content()
     {
-        return $this->belongsTo(BaseFolder::class);
+        return $this->belongsTo(Content::class);
     }
 
     public function permission()

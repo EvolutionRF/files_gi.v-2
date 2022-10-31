@@ -12,7 +12,7 @@
     </div>
     <div class="text-right">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Rename</button>
     </div>
 
 </form>

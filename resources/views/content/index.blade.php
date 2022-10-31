@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $Folder->name)
+@section('title', $folder->name)
 
 @push('style')
 <!-- CSS Libraries -->
@@ -45,22 +45,19 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>{{ $Folder->name }}</h1>
-
+            <h1>{{ $folder->name }}</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-
                 @foreach ($parents as $parent )
-                @if($Folder->slug != $parent['slug'])
+                @if($folder->slug != $parent['slug'])
                 <div class="breadcrumb-item"><a href="{{ route('EnterFolder',$parent['slug']) }}">{{ $parent['name']
                         }}</a>
                 </div>
                 @endif
                 @endforeach
-                <div class="breadcrumb-item"><a href="{{ route('EnterFolder', $Folder->slug) }}">{{ $Folder->name
+                <div class="breadcrumb-item"><a href="{{ route('EnterFolder', $folder->slug) }}">{{ $folder->name
                         }}</a>
                 </div>
-
             </div>
         </div>
         <div>
@@ -85,14 +82,14 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right ml-0">
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target="#TambahFolder"
-                                    onclick="createContent('{{ $Folder->slug }}','{{ route('folder.create') }}')">
+                                    data-target=".show-modal" data-title="Create Folder"
+                                    data-url="{{ route('folder.create',$folder->slug) }}">
                                     <x-heroicon-s-folder-open style="width:15px" class="ml-0" />
                                     Folder
                                 </a>
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
                                     data-target="#TambahFile"
-                                    onclick="createContentFile('{{ $Folder->slug }}','{{ route('file.upload') }}')">
+                                    onclick="createContentFile('{{ $folder->slug }}','{{ route('file.upload') }}')">
                                     <x-heroicon-s-document style="width:15px" class="ml-0" /> File
                                 </a>
                             </div>
@@ -100,194 +97,37 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-
-
-        <div class="row sortable-card">
-            @foreach($content_folder as $content)
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card card-secondary cardClick" id="card-{{ $content->id }}"
-                    onclick="cardClick('card-{{ $content->id }}')" style="cursor: pointer"
-                    ondblclick="newtab('{{ route('EnterFolder',$content->slug) }}')">
-                    <div class="card-logo p-3">
-                        <div class="d-flex justify-content-between">
-                            <div class="d-flex text-primary">
-                                <div class="my-auto">
-                                    <x-heroicon-s-folder-open style="width:40px" />
-                                </div>
-                                <div class="my-auto ml-3 d-inline-block">
-                                    <h6 class="mt-2 text-dark">{{ $content->name }}</h6>
-                                </div>
-                            </div>
-                            <div class="text-left">
-                                <ul class="navbar-nav">
-                                    <li class="dropdown">
-                                        <a href="" data-toggle="dropdown"
-                                            class="nav-link nav-link-lg nav-link-user p-0">
-                                            <x-heroicon-s-ellipsis-vertical style="width:15px" />
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right ml-0">
-                                            <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                                data-target="#Sidebar-Modal-Folder">
-                                                <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
-                                                Detail
-                                            </a>
-                                            <a type="button" class="dropdown-item has-icon pl-2">
-                                                <x-heroicon-s-cog-8-tooth style="width:15px" class="ml-0" /> Manage
-                                            </a>
-                                            <a type="button" class="dropdown-item has-icon pl-2">
-                                                <x-heroicon-s-arrow-path style="width:15px" class="ml-0" /> Update
-                                            </a>
-                                            <a type="button" class="dropdown-item has-icon pl-2">
-                                                <x-heroicon-s-pencil-square style="width:15px" class="ml-0" />
-                                                Rename
-                                            </a>
-                                            <a type="button" class="dropdown-item has-icon pl-2">
-                                                <x-heroicon-s-trash style="width:15px" class="ml-0" /> Delete
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-between py-auto mt-2">
-                            <div>
-                                <h6 class="text-small mb-0 ml-2">{{ $content->user->name }}</h6>
-                            </div>
-                            <div>
-                                @if($content->isPrivate =='private')
-                                <x-heroicon-s-lock-closed style="width:15px" />
-                                @else
-                                <x-heroicon-s-globe-americas style="width:15px" />
-                                @endif
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            @endforeach
         </div>
     </section>
-
-    @if($content_file)
-    <div class="">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table-striped table-md table" id="example">
-                    <tr class="text-bold">
-                        <th>Nama</th>
-                        <th>Owner</th>
-                        <th>Last Modify</th>
-                        <th>Access</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                    @foreach($content_file as $file)
-                    <tr>
-                        <td>
-                            <x-heroicon-s-document style="width:15px" class="ml-0" /> {{ $file->name }}
-                        </td>
-                        <td>{{ $file->user->name }}</td>
-                        <td>{{ @$file->getMedia('file')->first()->created_at->diffForHumans() }}</td>
-                        <td>{{ $file->isPrivate }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-info" data-toggle="modal"
-                                data-target="#Sidebar-Modal-File">Detail</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
-            </div>
-        </div>
+    @if((count($content_folder) >= 1) || (count($content_file) >= 1) )
+    @if((count($content_folder) >= 1))
+    @include('content._folder')
+    @else
+    <div class="text-center">
+        <p class="text-dark">There are no folder here </p>
+    </div>
+    @endif
+    <hr>
+    @if((count($content_file) >= 1))
+    @include('content._file')
+    @else
+    <div class="text-center">
+        <p class="text-dark">There are no files here </p>
+    </div>
+    @endif
+    @else
+    <div class="text-center">
+        <p class="text-dark">There are nothing here </p>
     </div>
     @endif
 
 
 </div>
 
-{{-- Create Folder Modal --}}
-<div class="modal fade" tabindex="-1" role="dialog" id="TambahFolder">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create Folder</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="" method="POST" id="FormCreate">
-                    @csrf
-                    {{-- @method('PUT') --}}
-                    <input type="text" name="parentSlug" id="parentSlug" hidden>
-                    <div class="form-group">
-                        <h6>Folder Name</h6>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-folder-plus"></i></div>
-                            </div>
-                            <input type="text" class="form-control" id="name" name="name">
-                        </div>
-                    </div>
-                    <div class="access-radio">
-                        <h6>General Access</h6>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate1" name="isPrivate" class="custom-control-input"
-                                value="public" checked>
-                            <label class="custom-control-label" for="isPrivate1">Public</label>
-                            <p>This project would be available to anyone who has the link</p>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input type="radio" id="isPrivate2" name="isPrivate" class="custom-control-input"
-                                value="private">
-                            <label class="custom-control-label" for="isPrivate2">Private</label>
-                            <p>Only people with access can open with the link</p>
-                        </div>
-                    </div>
+<x-modal.basic />
 
-                    <div class="form-group" id="formPrivate" style="display: none">
-                        <h6>Invite User</h6>
-                        <div class="form-group">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">Access</button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">View</a>
-                                        <a class="dropdown-item" href="#">Manage</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <h6>Generate Password</h6>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="" aria-label="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="button">Generate</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-right">
+<x-modal.detail />
 
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-{{-- End Create Folder Modal --}}
 
 {{-- Side Bar modal --}}
 <div class="modal fade right_modal" tabindex="-1" role="dialog" id="Sidebar-Modal-Folder">
@@ -605,15 +445,4 @@
 
 
 </script>
-
-<!-- JS Libraies -->
-<script src="{{ asset('library/simpleweather/jquery.simpleWeather.min.js') }}"></script>
-<script src="{{ asset('library/chart.js/dist/Chart.min.js') }}"></script>
-<script src="{{ asset('library/jqvmap/dist/jquery.vmap.min.js') }}"></script>
-<script src="{{ asset('library/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
-<script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script>
-<script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
-
-<!-- Page Specific JS File -->
-{{-- <script src="{{ asset('js/page/index-0.js') }}"></script> --}}
 @endpush

@@ -76,6 +76,8 @@
                 modal.find(".modal-body-custom").load(url);
             });
 
+
+
             $(".right_modal").on("show.bs.modal", (event) => {
                 var button = $(event.relatedTarget);
                 var modal = $(this);

@@ -49,7 +49,7 @@
         </div>
         <div class="form-group">
             <h6>User with Access</h6>
-            @foreach($folder->base_folders_accesses as $haveAccess)
+            @foreach($have_access as $haveAccess)
             <div class="border rounded p-1 pl-2 pr-2 d-flex justify-content-between mb-1" style="height: 40px">
                 <div class="d-flex justify-align-center">
                     <p class="m-0 mr-2 my-auto">🔘</p>

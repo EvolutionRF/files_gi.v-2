@@ -38,12 +38,11 @@ class DatabaseSeeder extends Seeder
 
         // Permission Seeder
         $name = [
-            'view',
-            'edit'
+            'View',
+            'Edit'
         ];
 
         foreach ($name as $name) {
-
             Permission::create([
                 'name' => $name
             ]);

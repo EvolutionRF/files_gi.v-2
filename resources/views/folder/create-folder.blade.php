@@ -1,7 +1,7 @@
 <form action="{{ $url }}" method="POST">
     @csrf
 
-    <input type="text" id="parent" name="parent" value="{{ @$parent_id }}" hidden>
+    <input type="text" id="parentSlug" name="parentSlug" value="{{ @$parent->slug }}" hidden>
     <div class="form-group">
         <h6>Folder Name</h6>
         <div class="input-group mb-2">
