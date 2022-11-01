@@ -95,8 +95,6 @@ class FoldersController extends Controller
 
     public function showDetail($id)
     {
-
-
         $data = [
             'folder' => BaseFolder::findOrFail($id),
             'url' => route('dashboard')
@@ -119,8 +117,6 @@ class FoldersController extends Controller
         } else {
             $parent = "";
         }
-
-        // return response()->json($parent);
 
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'user');
@@ -256,15 +252,25 @@ class FoldersController extends Controller
     {
         $folder = BaseFolder::where('slug', $slug)->first();
         if (!$folder) {
-            $folder = Content::where('slug', $slug)->with('contents')->get();
+            $folder = Content::where('slug', $slug)->first();
         }
         $data = [
             'folder' => $folder,
             'url' => route('folder.delete', $slug)
         ];
-        return response()->json($folder);
 
-        // return response()->json($data);
+        $collection = collect([]);
+
+        $collection->push([
+            'id' => $folder->id,
+            'name' => $folder->name,
+            'slug' => $folder->slug,
+            'parent' => $folder->contentable_id
+        ]);
+
+        $folder = $folder->contents;
+        // Layer 1
+
         return view('folder.delete-folder', $data);
     }
 
@@ -275,22 +281,18 @@ class FoldersController extends Controller
         if (!$folder) {
             $folder = Content::where('slug', $slug)->first();
             $back = $folder;
+            $folder->deleteWithInnerFolder();
         } else {
-            // $contentToDelete = Content::where('basefolder_id', $folder->id)->get();
+            $folder->delete();
         }
 
-        // foreach ($contentToDelete as $content) {
-        //     if ($content->type == 'file') {
-        //         $media_content = $content->getMedia('file')->first();
-        //         $media_content->delete();
-        //     }
-        // }
 
-        $delete = $folder->delete();
-        if ($delete) {
-            activity()->causedBy(auth()->user())->performedOn($back)->log('Delete Base Folder');
-            $flasher->addSuccess('Folder has been Delete successfully!');
-            return redirect()->route('dashboard', $back->contentable->slug);
+        activity()->causedBy(auth()->user())->performedOn($back)->log('Delete Base Folder');
+        $flasher->addSuccess('Folder has been Delete successfully!');
+        if (!$back->contentable) {
+            return redirect()->route('dashboard');
+        } else {
+            return redirect()->route('EnterFolder', $back->contentable->slug);
         }
     }
 

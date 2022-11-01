@@ -31,4 +31,15 @@ class Content extends Model implements HasMedia
     {
         return $this->hasMany(ContentAccess::class, 'content_id', 'id');
     }
+
+    public function deleteWithInnerFolder()
+    {
+        if (count($this->contents) > 0) {
+            // Delete children recursive
+            foreach ($this->contents as $content) {
+                $content->deleteWithInnerFolder();
+            }
+        }
+        $this->delete();
+    }
 }
