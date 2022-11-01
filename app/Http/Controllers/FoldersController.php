@@ -286,7 +286,6 @@ class FoldersController extends Controller
             $folder->delete();
         }
 
-
         activity()->causedBy(auth()->user())->performedOn($back)->log('Delete Base Folder');
         $flasher->addSuccess('Folder has been Delete successfully!');
         if (!$back->contentable) {
@@ -329,28 +328,43 @@ class FoldersController extends Controller
 
     public function storeManage(Request $request, $slug, SweetAlertFactory $flasher)
     {
-        $baseFolder = BaseFolder::findOrFail($slug);
+        if ($request->invitedUser) {
+            $dataAcccess = [
+                'permission_id' => $request->accessType,
+                'user_id' => $request->invitedUser,
+                'status' => 'accept'
+            ];
+        }
+
+        $folder = BaseFolder::where('slug', $slug)->first();
+        $route = route('dashboard');
+
+        if (!$folder) {
+            $folder = Content::where('slug', $slug)->first();
+            $route = route('EnterFolder', $folder->contentable->slug);
+            $dataAcccess['content_id'] = $folder->id;
+            if ($request->isPrivate == 'public') {
+                ContentAccess::where('content_id', $folder->id)->delete();
+            } else {
+                ContentAccess::create($dataAcccess);
+            }
+        } else {
+            $dataAcccess['basefolder_id'] = $folder->id;
+            if ($request->isPrivate == 'public') {
+                BaseFolderAccess::where('basefolder_id', $folder->id)->delete();
+            } else {
+                BaseFolderAccess::create($dataAcccess);
+            }
+        }
         $data = [
             'isPrivate' => $request->isPrivate
         ];
-        $doneUpdate = $baseFolder->update($data);
-        if ($doneUpdate) {
-            if ($request->invitedUser) {
-                $dataAcccess = [
-                    'basefolder_id' => $baseFolder->id,
-                    'permission_id' => $request->accessType,
-                    'user_id' => $request->invitedUser,
-                    'status' => 'accept'
-                ];
-                BaseFolderAccess::create($dataAcccess);
-            }
+        $doneUpdate = $folder->update($data);
 
-            if ($request->isPrivate == 'public') {
-                BaseFolderAccess::where('basefolder_id', $id)->delete();
-            }
-            activity()->causedBy(auth()->user())->performedOn($baseFolder)->log('Manage Base Folder');
+        if ($doneUpdate) {
+            activity()->causedBy(auth()->user())->performedOn($folder)->log('Manage Folder');
             $flasher->addSuccess('Folder has been Updated successfully!');
-            return redirect()->route('dashboard');
+            return redirect($route);
         }
     }
 
