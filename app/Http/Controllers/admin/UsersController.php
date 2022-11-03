@@ -21,9 +21,9 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->division) {
+        if ($request->has('search')) {
             // return response()->json($request->division);
-            $users = User::where('division_id', $request->division)->fastPaginate(50);
+            $users = User::where('name','LIKE','%' .$request->search.'%')->fastPaginate(50);
         } else {
             $users = User::fastPaginate(50);
         }

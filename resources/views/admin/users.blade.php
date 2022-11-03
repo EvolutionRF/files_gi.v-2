@@ -56,7 +56,7 @@
                                 <div class="search-element">
                                     <form action="">
                                         <input class="form-control selectric" type="search" placeholder="Search"
-                                            aria-label="Search" name="search" id="search">
+                                         aria-label="Search" name="search" id="search" value="{{ @Request()->search }}">
                                     </form>
                                 </div>
                             </div>
