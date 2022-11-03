@@ -22,6 +22,11 @@ class Content extends Model implements HasMedia
         return $this->morphTo();
     }
 
+    public function baseFolder()
+    {
+        return $this->belongsTo(BaseFolder::class, 'basefolder_id', 'id');
+    }
+
     public function contents()
     {
         return $this->morphMany('App\Models\Content', 'contentable');

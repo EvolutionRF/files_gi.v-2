@@ -58,7 +58,6 @@
     <script src="{{ asset('library/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
 
-
     @stack('scripts')
 
     <!-- Template JS File -->

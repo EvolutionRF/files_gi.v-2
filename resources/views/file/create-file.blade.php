@@ -1,31 +1,33 @@
-<form action="{{ $url }}" method="POST">
+<form action="{{ $url }}" method="POST" enctype="multipart/form-data" id="formUpload">
     @csrf
-
-    <input type="text" id="parentSlug" name="parentSlug" value="{{ @$parent->slug }}" hidden>
+    <input type="text" id="parentSlug" name="parentSlug" value="{{ $parent->slug }}" hidden>
     <div class="form-group">
-        <h6>Folder Name</h6>
-        <div class="input-group mb-2">
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="fas fa-folder-plus"></i></div>
-            </div>
-            <input type="text" class="form-control" id="name" name="name">
+        <h6>File Title</h6>
+        <input type="text" class="form-control" name="name">
+    </div>
+    <div class="form-group">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" name="file">
+            <label class="custom-file-label" for="customFile">Upload File</label>
         </div>
     </div>
-    <div class="access-radio">
+    <div class="access-radio mt-2">
         <h6>General Access</h6>
         <div class="custom-control custom-radio">
-            <input type="radio" id="is-private1" name="isPrivate" class="custom-control-input" value="public" checked>
-            <label class="custom-control-label" for="is-private1">Public</label>
+            <input type="radio" id="FileisPrivate1" name="FileisPrivate" class="custom-control-input" value="public"
+                checked>
+            <label class="custom-control-label" for="FileisPrivate1">Public</label>
             <p>This project would be available to anyone who has the link</p>
         </div>
         <div class="custom-control custom-radio">
-            <input type="radio" id="is-private2" name="isPrivate" class="custom-control-input" value="private">
-            <label class="custom-control-label" for="is-private2">Privates</label>
+            <input type="radio" id="FileisPrivate2" name="FileisPrivate" class="custom-control-input" value="private">
+            <label class="custom-control-label" for="FileisPrivate2">Private</label>
             <p>Only people with access can open with the link</p>
         </div>
     </div>
 
-    <div class="form-group" id="formPrivate" style="display: none">
+
+    <div class="form-group" id="formFilePrivate" style="display: none">
         <h6>Invite User</h6>
         <div class="form-group">
             <div class="input-group mb-3">
@@ -62,8 +64,8 @@
 
 <script>
     $(document).ready(function () {
-        const privateForm = document.querySelector('#formPrivate');
-        $('[name=isPrivate]').change(function() {
+        const privateForm = document.querySelector('#formFilePrivate');
+        $('[name=FileisPrivate]').change(function() {
             if (this.value == 'private') {
                 privateForm.style.display = 'block';
             } else {

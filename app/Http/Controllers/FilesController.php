@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\BaseFolder;
 use App\Models\Content;
+use App\Models\ContentAccess;
+use App\Models\Permission;
+use App\Models\User;
 use Flasher\SweetAlert\Prime\SweetAlertFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -39,6 +42,184 @@ class FilesController extends Controller
                     return redirect()->route('EnterFolder', $request->FileparentSlug);
                 }
             }
+        }
+    }
+
+    public function showCreate($slug)
+    {
+        $parent = BaseFolder::where('slug', $slug)->first();
+        if (!$parent) {
+            $parent = Content::where('slug', $slug)->first();
+        }
+
+        // return response()->json()
+
+        $users = User::whereHas('roles', function ($q) {
+            $q->where('name', 'user');
+        })->where('id', '!=', auth()->user()->id)->get();
+        $permissions = Permission::all();
+
+        $data = [
+            'users' => $users,
+            'url' => route('file.storecreate'),
+            'permissions' => $permissions,
+            'parent' => $parent
+        ];
+
+        // return response()->json($slug);
+        return view('file.create-file', $data);
+    }
+
+    public function storeCreate(Request $request, SweetAlertFactory $flasher)
+    {
+
+        // return response()->json($request);
+        $parent = BaseFolder::where('slug', $request->parentSlug)->first();
+        if (!$parent) {
+            $parent = Content::where('slug', $request->parentSlug)->first();
+            $baseFolder_id = $parent->basefolder_id;
+        } else {
+            $baseFolder_id = $parent->id;
+        }
+
+        $content = new Content(); //bikin object content
+        $content->name = $request->get('name'); // mengisi content->name dengan request name
+        $content->type = 'file'; //mengisi content->type dengan file
+        $content->owner_id = auth()->user()->id; //mengisi owner_id dengan user yang login
+        $content->slug = Str::random(32); //mengisi slug dengan $slugContent
+        $content->basefolder_id = $baseFolder_id; //mengisi basefolder_id dengan $baseFolder
+        $content->isPrivate = $request->FileisPrivate;
+
+        $doneUploadFile = $parent->contents()->save($content);
+        if ($doneUploadFile) {
+            if ($request->hasFile('file')) {
+                $done = $doneUploadFile->addMediaFromRequest('file')->toMediaCollection('file');
+                if ($done) {
+                    if ($request->FileisPrivate == 'private') {
+                        if ($request->invitedUser) {
+                            $data_access = [
+                                'content_id' => $doneUploadFile->id,
+                                'permission_id' => $request->accessType,
+                                'user_id' => $request->invitedUser,
+                                'status' => 'accept'
+                            ];
+                            $accessDone = ContentAccess::create($data_access);
+                            if ($accessDone) {
+                                activity()->causedBy(auth()->user())->performedOn($done)->log('Upload File');
+                                $flasher->addSuccess('File has been Uploaded successfully!');
+                                return redirect()->route('EnterFolder', $request->parentSlug);
+                            }
+                        }
+                    }
+
+
+                    activity()->causedBy(auth()->user())->performedOn($doneUploadFile)->log('Upload File');
+                    $flasher->addSuccess('File has been Uploaded successfully!');
+                    return redirect()->route('EnterFolder', $request->parentSlug);
+                }
+            }
+        }
+    }
+
+    public function showDetail($slug)
+    {
+
+        // return response()->json($slug);
+        $file = Content::where('slug', $slug)->first();
+
+
+        $data = [
+            'file' => $file
+        ];
+
+        return view('file.detail-file', $data);
+    }
+
+    public function showManage($slug)
+    {
+        // return response()->json($slug);
+        $file = Content::where('slug', $slug)->first();
+        $user_manage = $file->access->pluck('user_id');
+        $have_access = $file->access;
+
+        $users = User::whereHas('roles', function ($q) {
+            $q->where('name', 'user');
+        })->where('id', '!=', auth()->user()->id)
+            ->where(function ($q) use ($user_manage) {
+                $q->whereNotIn('id', $user_manage);
+            })->get();
+
+        $permissions = Permission::all();
+        $data = [
+            'file' => $file,
+            'have_access' => $have_access,
+            'url' => route('file.storemanage', $slug),
+            'users' => $users,
+            'permissions' => $permissions
+        ];
+
+        return view('file.manage-file', $data);
+    }
+
+    public function storeManage($slug, Request $request, SweetAlertFactory $flasher)
+    {
+        $dataAcccess = [
+            'permission_id' => $request->accessType,
+            'user_id' => $request->invitedUser,
+            'status' => 'accept'
+        ];
+
+        $file = Content::where('slug', $slug)->first();
+        $route = route('EnterFolder', $file->contentable->slug);
+        $dataAcccess['content_id'] = $file->id;
+        if ($request->isPrivate == 'public') {
+            ContentAccess::where('content_id', $file->id)->delete();
+        } else {
+            if ($request->invitedUser) {
+                ContentAccess::create($dataAcccess);
+            }
+        }
+
+        $data = [
+            'isPrivate' => $request->isPrivate
+        ];
+        $doneUpdate = $file->update($data);
+
+        if ($doneUpdate) {
+            activity()->causedBy(auth()->user())->performedOn($file)->log('Manage File');
+            $flasher->addSuccess('File has been Updated successfully!');
+            return redirect($route);
+        }
+    }
+
+    public function showRename($slug)
+    {
+        $file = Content::where('slug', $slug)->first();
+
+
+        $data = [
+            'file' => $file,
+            'url' => route('file.storerename', $slug)
+        ];
+
+        return view('file.rename-folder', $data);
+    }
+
+    public function storeRename(Request $request, $slug, SweetAlertFactory $flasher)
+    {
+
+        $file = Content::where('slug', $slug)->first();
+        $route = route('EnterFolder', $file->contentable->slug);
+
+        $data = [
+            'name' => $request->name,
+        ];
+
+        $doneUpdate = $file->update($data);
+        if ($doneUpdate) {
+            activity()->causedBy(auth()->user())->performedOn($file)->log('Rename File');
+            $flasher->addSuccess('File has been Rename successfully!');
+            return redirect($route);
         }
     }
 }

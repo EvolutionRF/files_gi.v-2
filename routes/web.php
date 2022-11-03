@@ -36,7 +36,7 @@ Route::POST('/file/upload', [App\Http\Controllers\FilesController::class, 'uploa
 
 
 Route::controller(FoldersController::class)->prefix('folder')->group(function () {
-    Route::get('/show/{id}', 'showDetail')->name('folder.show');
+    Route::get('/show/{slug}', 'showDetail')->name('folder.show');
 
     Route::get('/rename/{slug}', 'showRename')->name('folder.rename');
     Route::PUT('/storerename/{slug}', 'storeRename')->name('folder.storerename');
@@ -50,6 +50,20 @@ Route::controller(FoldersController::class)->prefix('folder')->group(function ()
 
     Route::get('/manage/{slug}', 'showManage')->name('folder.manage');
     Route::PUT('/storemanage/{slug}', 'storeManage')->name('folder.storemanage');
+});
+
+Route::controller(FilesController::class)->prefix('file')->group(function () {
+    Route::get('/create/{slug}', 'showCreate')->name('file.showcreate');
+    Route::POST('/store', 'storeCreate')->name('file.storecreate');
+
+
+    Route::get('/show/{slug}', 'showDetail')->name('file.showdetail');
+
+    Route::get('/manage/{slug}', 'showManage')->name('file.showmanage');
+    Route::PUT('/storemanage/{slug}', 'storeManage')->name('file.storemanage');
+
+    Route::get('/rename/{slug}', 'showRename')->name('file.showrename');
+    Route::PUT('/storerename/{slug}', 'storeRename')->name('file.storerename');
 });
 
 

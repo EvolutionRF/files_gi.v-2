@@ -20,7 +20,6 @@ class FoldersController extends Controller
     {
         $folder = BaseFolder::where('slug', $slug)->first();
         $baseFolder = "";
-
         $permission = Permission::all();
         $parents = array();
         if ($folder) {
@@ -31,6 +30,7 @@ class FoldersController extends Controller
             );
         } else {
             $folder = Content::where('slug', $slug)->first();
+
             $baseFolder = BaseFolder::find($folder->basefolder_id);
             $access_folder = $folder->access;
             $result = $folder->contentable;
@@ -64,6 +64,11 @@ class FoldersController extends Controller
                 if ($folder->isPrivate == 'public') {
                     return view('content.index', $data);
                 } else {
+                    if ($baseFolder != "") {
+                        if (auth()->user()->id == $folder->baseFolder->owner_id) {
+                            return view('content.index', $data);
+                        }
+                    }
                     if (auth()->user()->id == $folder->owner_id) {
                         return view('content.index', $data);
                     } else {
@@ -93,13 +98,19 @@ class FoldersController extends Controller
 
 
 
-    public function showDetail($id)
+    public function showDetail($slug)
     {
+        $folder = BaseFolder::where('slug', $slug)->first();
+        if (!$folder) {
+            $folder = Content::where('slug', $slug)->first();
+        }
+
+
+        // return response()->json($folder);
         $data = [
-            'folder' => BaseFolder::findOrFail($id),
+            'folder' => $folder,
             'url' => route('dashboard')
         ];
-        // return response()->json($data);
 
         return view('folder.detail-folder', $data);
     }
@@ -328,13 +339,12 @@ class FoldersController extends Controller
 
     public function storeManage(Request $request, $slug, SweetAlertFactory $flasher)
     {
-        if ($request->invitedUser) {
-            $dataAcccess = [
-                'permission_id' => $request->accessType,
-                'user_id' => $request->invitedUser,
-                'status' => 'accept'
-            ];
-        }
+        $dataAcccess = [
+            'permission_id' => $request->accessType,
+            'user_id' => $request->invitedUser,
+            'status' => 'accept'
+        ];
+
 
         $folder = BaseFolder::where('slug', $slug)->first();
         $route = route('dashboard');
@@ -346,14 +356,19 @@ class FoldersController extends Controller
             if ($request->isPrivate == 'public') {
                 ContentAccess::where('content_id', $folder->id)->delete();
             } else {
-                ContentAccess::create($dataAcccess);
+
+                if ($request->invitedUser) {
+                    ContentAccess::create($dataAcccess);
+                }
             }
         } else {
             $dataAcccess['basefolder_id'] = $folder->id;
             if ($request->isPrivate == 'public') {
                 BaseFolderAccess::where('basefolder_id', $folder->id)->delete();
             } else {
-                BaseFolderAccess::create($dataAcccess);
+                if ($request->invitedUser) {
+                    BaseFolderAccess::create($dataAcccess);
+                }
             }
         }
         $data = [
