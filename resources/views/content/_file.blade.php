@@ -44,7 +44,8 @@
                                     Rename
                                 </a>
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target=".show-modal" data-title="Delete Folder" data-url="">
+                                    data-target=".show-modal" data-title="Delete Folder"
+                                    data-url="{{ route('file.showdelete', $file->slug) }}">
                                     <x-heroicon-s-trash style="width:15px" class="ml-0" /> Delete
                                 </a>
                                 @else

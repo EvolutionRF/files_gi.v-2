@@ -118,7 +118,6 @@ class FoldersController extends Controller
 
     public function create($slug = "")
     {
-        // $parent = "";
         // return response()->json($slug);
         if ($slug) {
             $parent = BaseFolder::where('slug', $slug)->first();
@@ -128,6 +127,7 @@ class FoldersController extends Controller
         } else {
             $parent = "";
         }
+
 
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'user');
@@ -140,7 +140,6 @@ class FoldersController extends Controller
             'permissions' => $permissions,
             'parent' => $parent
         ];
-        // return response()->json($data);
 
         return view('folder.create-folder', $data);
     }
@@ -259,28 +258,18 @@ class FoldersController extends Controller
         }
     }
 
-    public function showDelete($slug, SweetAlertFactory $flasher)
+    public function showDelete($slug)
     {
         $folder = BaseFolder::where('slug', $slug)->first();
         if (!$folder) {
             $folder = Content::where('slug', $slug)->first();
         }
+
         $data = [
             'folder' => $folder,
             'url' => route('folder.delete', $slug)
         ];
 
-        $collection = collect([]);
-
-        $collection->push([
-            'id' => $folder->id,
-            'name' => $folder->name,
-            'slug' => $folder->slug,
-            'parent' => $folder->contentable_id
-        ]);
-
-        $folder = $folder->contents;
-        // Layer 1
 
         return view('folder.delete-folder', $data);
     }
@@ -294,6 +283,13 @@ class FoldersController extends Controller
             $back = $folder;
             $folder->deleteWithInnerFolder();
         } else {
+            $contentToDelete = Content::where('basefolder_id', $folder->id)->get();
+            foreach ($contentToDelete as $content) {
+                if ($content->type == 'file') {
+                    $media_content = $content->getMedia('file')->first();
+                    $media_content->delete();
+                }
+            }
             $folder->delete();
         }
 

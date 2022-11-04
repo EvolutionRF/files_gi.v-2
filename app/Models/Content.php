@@ -40,11 +40,14 @@ class Content extends Model implements HasMedia
     public function deleteWithInnerFolder()
     {
         if (count($this->contents) > 0) {
-            // Delete children recursive
             foreach ($this->contents as $content) {
+                if ($content->type == 'file') {
+                    $content->getMedia('file')->first()->delete();
+                }
                 $content->deleteWithInnerFolder();
             }
         }
+
         $this->delete();
     }
 }

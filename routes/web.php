@@ -64,6 +64,9 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
 
     Route::get('/rename/{slug}', 'showRename')->name('file.showrename');
     Route::PUT('/storerename/{slug}', 'storeRename')->name('file.storerename');
+
+    Route::get('/delete/{slug}', 'showDelete')->name('file.showdelete');
+    Route::DELETE('/delete/{slug}', 'storeDelete')->name('file.delete');
 });
 
 

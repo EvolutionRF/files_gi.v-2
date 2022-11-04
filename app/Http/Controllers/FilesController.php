@@ -222,4 +222,20 @@ class FilesController extends Controller
             return redirect($route);
         }
     }
+
+    public function showDelete($slug)
+    {
+        $file = Content::where('slug', $slug)->get();
+        $data = [
+            'file' => $file,
+            'url' => route('file.delete', $slug)
+        ];
+
+        return view('file.delete-file', $data);
+    }
+
+    public function storeDelete($slug)
+    {
+        # code...
+    }
 }
