@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreign('basefolder_id')->references('id')->on('base_folders')->onDelete('cascade');
             // $table->string('slug');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

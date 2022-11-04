@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('content_id')->references('id')->on('contents')->onDelete('cascade');
             $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

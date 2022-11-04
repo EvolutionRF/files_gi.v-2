@@ -121,8 +121,11 @@ class FoldersController extends Controller
         // return response()->json($slug);
         if ($slug) {
             $parent = BaseFolder::where('slug', $slug)->first();
+            $access_folder = $parent->base_folders_accesses;
+
             if (!$parent) {
                 $parent = Content::where('slug', $slug)->first();
+                $access_folder = $parent->access;
             }
         } else {
             $parent = "";
@@ -140,8 +143,31 @@ class FoldersController extends Controller
             'permissions' => $permissions,
             'parent' => $parent
         ];
-
-        return view('folder.create-folder', $data);
+        if ($parent == "") {
+            return view('folder.create-folder', $data);
+        } else {
+            if (auth()->user()->getRoleNames()->first() == "admin") {
+                return view('folder.create-folder', $data);
+            } else {
+                if ($parent->isPrivate == 'public') {
+                    return view('folder.create-folder', $data);
+                } else {
+                    if (auth()->user()->id == $parent->owner_id) {
+                        return view('folder.create-folder', $data);
+                    } else {
+                        if ($access_folder) {
+                            foreach ($access_folder as $access) {
+                                if (auth()->user()->id == $access->user_id && $access->permission_id == 2) {
+                                    return view('folder.create-folder', $data);
+                                }
+                            }
+                            // $flasher->addError('You Dont have access');
+                            return view('folder.ask-request', $data);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function store(Request $request, SweetAlertFactory $flasher)
