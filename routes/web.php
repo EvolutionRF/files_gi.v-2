@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\BaseFoldersController;
 use App\Http\Controllers\FilesController;
 use App\Http\Controllers\FoldersController;
+use App\Http\Controllers\TrashController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,10 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
 
     Route::get('/delete/{slug}', 'showDelete')->name('file.showdelete');
     Route::DELETE('/delete/{slug}', 'storeDelete')->name('file.delete');
+});
+
+Route::controller(TrashController::class)->prefix('trash')->group(function () {
+    Route::get('/', 'index')->name('trash.index');
 });
 
 

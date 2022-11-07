@@ -15,7 +15,6 @@ class FilesController extends Controller
 {
     public function upload(Request $request, SweetAlertFactory $flasher)
     {
-        // dd($request->all());
         $parent = BaseFolder::where('slug', $request->FileparentSlug)->first();
         if (!$parent) {
             $parent = Content::where('slug', $request->FileparentSlug)->first();
@@ -235,11 +234,11 @@ class FilesController extends Controller
     {
         $file = Content::where('slug', $slug)->first();
         $back = $file;
-        $media_content = $file->getMedia('file')->first();
-        $done = $media_content->delete();
+        // $media_content = $file->getMedia('file')->first();
+        // $done = $media_content->delete();
 
+        $done = $file->delete();
         if ($done) {
-            $file->delete();
             activity()->causedBy(auth()->user())->performedOn($back)->log('Delete File');
             $flasher->addSuccess('File has been Delete successfully!');
             return redirect()->route('EnterFolder', $back->contentable->slug);
