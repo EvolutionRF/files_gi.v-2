@@ -72,6 +72,12 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
 
 Route::controller(TrashController::class)->prefix('trash')->group(function () {
     Route::get('/', 'index')->name('trash.index');
+
+    Route::get('/restore/{slug}', 'showRestore')->name('trash.showrestore');
+    Route::POST('/restore/{slug}', 'storeRestore')->name('trash.restore');
+
+    Route::get('/forceDel/{slug}', 'showForceDelete')->name('trash.showforcedelete');
+    Route::DELETE('/forceDel/{slug}', 'storeForceDelete')->name('trash.forcedelete');
 });
 
 

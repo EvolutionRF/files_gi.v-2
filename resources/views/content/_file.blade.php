@@ -11,7 +11,17 @@
             @foreach($content_file as $file)
             <tr>
                 <td>
+                    @if ($file->getMedia('file')->first()->mime_type ==
+                    'image/png'|| $file->getMedia('file')->first()->mime_type ==
+                    'image/jpg'||$file->getMedia('file')->first()->mime_type == 'image/jpeg')
+
+                    <x-heroicon-s-photo style="width:15px" class="ml-0" /> {{ $file->name }}
+                    @else
+
                     <x-heroicon-s-document style="width:15px" class="ml-0" /> {{ $file->name }}
+
+                    @endif
+
                 </td>
                 <td>{{ $file->user->name }}</td>
                 {{-- <td>{{ @$file->getMedia('file')->first()->updated_at->diffForHumans() }}</td> --}}

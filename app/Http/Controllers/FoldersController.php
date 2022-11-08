@@ -30,10 +30,16 @@ class FoldersController extends Controller
             );
         } else {
             $folder = Content::where('slug', $slug)->first();
-
+            // return response()->json($slug);
+            if ($folder == "") {
+                return response()->json('Folder Deleted');
+            }
             $baseFolder = BaseFolder::find($folder->basefolder_id);
             $access_folder = $folder->access;
             $result = $folder->contentable;
+            if ($result == "") {
+                return response()->json('ERROR');
+            }
             $count = 0;
             do {
                 //
@@ -100,9 +106,11 @@ class FoldersController extends Controller
 
     public function showDetail($slug)
     {
-        $folder = BaseFolder::where('slug', $slug)->first();
+        $folder = BaseFolder::where('slug', $slug)->withTrashed()->first();
+        // return response()->json($folder);
+
         if (!$folder) {
-            $folder = Content::where('slug', $slug)->first();
+            $folder = Content::where('slug', $slug)->withTrashed()->first();
         }
 
 
@@ -121,8 +129,10 @@ class FoldersController extends Controller
         // return response()->json($slug);
         if ($slug) {
             $parent = BaseFolder::where('slug', $slug)->first();
-            $access_folder = $parent->base_folders_accesses;
-
+            // return response()->json($parent);
+            if ($parent) {
+                $access_folder = $parent->base_folders_accesses;
+            }
             if (!$parent) {
                 $parent = Content::where('slug', $slug)->first();
                 $access_folder = $parent->access;
@@ -271,6 +281,7 @@ class FoldersController extends Controller
             $folder = Content::where('slug', $slug)->first();
             $route = route('EnterFolder', $folder->contentable->slug);
         }
+
         $data = [
             'name' => $request->name,
         ];
@@ -307,15 +318,16 @@ class FoldersController extends Controller
         if (!$folder) {
             $folder = Content::where('slug', $slug)->first();
             $back = $folder;
-            $folder->deleteWithInnerFolder();
+            // $folder->deleteWithInnerFolder();
+            $folder->delete();
         } else {
-            $contentToDelete = Content::where('basefolder_id', $folder->id)->get();
-            foreach ($contentToDelete as $content) {
-                if ($content->type == 'file') {
-                    $media_content = $content->getMedia('file')->first();
-                    $media_content->delete();
-                }
-            }
+            // $contentToDelete = Content::where('basefolder_id', $folder->id)->get();
+            // foreach ($contentToDelete as $content) {
+            //     if ($content->type == 'file') {
+            //         $media_content = $content->getMedia('file')->first();
+            //         $media_content->delete();
+            //     }
+            // }
             $folder->delete();
         }
 

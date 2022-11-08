@@ -43,7 +43,7 @@ class Content extends Model implements HasMedia
         if (count($this->contents) > 0) {
             foreach ($this->contents as $content) {
                 if ($content->type == 'file') {
-                    $content->getMedia('file')->first()->delete();
+                    $content->getMedia('file')->first()->forceDelete();
                 }
                 $content->deleteWithInnerFolder();
             }
