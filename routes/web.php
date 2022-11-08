@@ -71,6 +71,7 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
 
 
     Route::get('/download/{slug}', 'showDownloadFile')->name('file.showdownload');
+    Route::get('/download-file/{slug}', 'downloadFile')->name('file.download');
 });
 
 Route::controller(TrashController::class)->prefix('trash')->group(function () {

@@ -248,13 +248,23 @@ class FilesController extends Controller
     public function showDownloadFile($slug)
     {
 
-        return response()->json($slug);
         $file = Content::where('slug', $slug)->first();
+        // $media = $file->getFirstMedia('file');
+        // return response()->json($media);
 
+
+        $data = [
+            'file' => $file,
+            // 'media' => $media
+        ];
+        return view('file.download-file', $data);
+    }
+
+    public function downloadFile($slug)
+    {
+        $file = Content::where('slug', $slug)->first();
         $media = $file->getFirstMedia('file');
 
-        // return view();
-        // return response()->download($media->getPath(), $file->name . '_' . $media->file_name);
-        // return $media;
+        return response()->download($media->getPath(), $file->name . '_' . $media->file_name);
     }
 }
