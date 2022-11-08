@@ -68,6 +68,9 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
 
     Route::get('/delete/{slug}', 'showDelete')->name('file.showdelete');
     Route::DELETE('/delete/{slug}', 'storeDelete')->name('file.delete');
+
+
+    Route::get('/download/{slug}', 'showDownloadFile')->name('file.showdownload');
 });
 
 Route::controller(TrashController::class)->prefix('trash')->group(function () {

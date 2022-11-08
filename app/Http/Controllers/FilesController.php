@@ -244,4 +244,17 @@ class FilesController extends Controller
             return redirect()->route('EnterFolder', $back->contentable->slug);
         }
     }
+
+    public function showDownloadFile($slug)
+    {
+
+        return response()->json($slug);
+        $file = Content::where('slug', $slug)->first();
+
+        $media = $file->getFirstMedia('file');
+
+        // return view();
+        // return response()->download($media->getPath(), $file->name . '_' . $media->file_name);
+        // return $media;
+    }
 }
