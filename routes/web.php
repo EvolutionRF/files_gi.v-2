@@ -71,3 +71,6 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
 
 
 Route::get('/request/{id}', [FoldersController::class, 'askRequest'])->name('request');
+Route::GET('/trash', function () {
+    return view('Trash.index', ['type_menu' => 'index']);
+})->name('index');

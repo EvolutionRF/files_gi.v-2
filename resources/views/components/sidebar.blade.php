@@ -40,7 +40,7 @@
 
         <ul class="sidebar-menu">
             <li class="{{ $type_menu === 'Trash' ? 'active' : '' }}">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route('index') }}">
                     <x-heroicon-s-trash style="max-width:20px" />
                     <span class="ml-2">Trash</span>
                 </a>
