@@ -1,10 +1,8 @@
-<form action="{{ $url }}" method="POST" id="formDeleteBaseFolder">
+<form action="{{ $url }}" method="POST" id="deleteForm" name="deleteForm">
     @csrf
     @method('DELETE')
     <div class="modal-body">
-        <div class="form-group">
-            <p>Are you sure to <b>Delete</b> the Folder pemanently?</p>
-        </div>
+        <p class="text-center">Are you sure delete the entire data?</p>
     </div>
     <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

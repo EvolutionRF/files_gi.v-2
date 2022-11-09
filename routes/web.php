@@ -25,18 +25,32 @@ Route::redirect('/home', '/dashboard');
 Route::redirect('/', '/dashboard');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
-Route::get('/folders/{slug}', [App\Http\Controllers\FoldersController::class, 'EnterFolder'])->name('EnterFolder');
+
+Route::controller(UsersController::class)->prefix('admin/users')->middleware('role:admin')->group(function () {
+
+    Route::get('', 'index')->name('users.index');
+
+    Route::get('/create', 'create')->name('users.create');
+    Route::POST('/store', 'store')->name('users.store');
 
 
-// Route::POST('/folder/create', [App\Http\Controllers\FoldersController::class, 'CreateFolder'])->name('folder.create');
+    Route::get('/edit/{id}', 'edit')->name('users.edit');
+    Route::PUT('/update/{id}', 'update')->name('users.update');
+
+    Route::get('/delete/{id}', 'showDestroy')->name('users.showdestroy');
+    Route::DELETE('/delete/{id}', 'destroy')->name('users.destroy');
+
+    Route::get('/reset-password/{id}', 'showReset')->name('users.showreset');
+    Route::PUT('/reset/{id}', 'resetPassword')->name('users.resetpassword');
+});
 
 
-Route::resource('/admin/users', UsersController::class)->middleware('role:admin');
-
-Route::POST('/file/upload', [App\Http\Controllers\FilesController::class, 'upload'])->name('file.upload');
 
 
 Route::controller(FoldersController::class)->prefix('folder')->group(function () {
+    Route::get('/folders/{slug}', 'EnterFolder')->name('EnterFolder');
+
+
     Route::get('/show/{slug}', 'showDetail')->name('folder.show');
 
     Route::get('/rename/{slug}', 'showRename')->name('folder.rename');

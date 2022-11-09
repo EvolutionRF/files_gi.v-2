@@ -13,6 +13,10 @@ use Illuminate\Support\Str;
 
 class FilesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function upload(Request $request, SweetAlertFactory $flasher)
     {
         $parent = BaseFolder::where('slug', $request->FileparentSlug)->first();

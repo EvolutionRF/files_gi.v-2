@@ -29,7 +29,7 @@
                                         Detail
                                     </a>
                                     <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                        data-target=".show-modal" data-title="Restore Folder {{ $folder->name }}"
+                                        data-target=".show-modal" data-title="Restore {{ $folder->name }}"
                                         data-url="{{ route('trash.showrestore',$folder->slug) }}">
                                         <x-heroicon-s-arrow-path-rounded-square style="width:15px" class="ml-0" />
                                         Restore

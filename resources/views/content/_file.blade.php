@@ -18,7 +18,8 @@
                     @else
                     <x-heroicon-s-document style="width:15px" class="ml-0" />
                     @endif
-                    <a type="button" data-toggle="modal" data-target=".show-modal" data-title="Download File"
+                    <a href="{{ route('file.showdownload', $file->slug) }}" type="button" data-toggle="modal"
+                        data-target=".show-modal" data-title="Download File"
                         data-url="{{ route('file.showdownload', $file->slug) }}">
                         {{ $file->name }}
                     </a>

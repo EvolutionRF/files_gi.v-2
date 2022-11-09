@@ -72,6 +72,13 @@ class UsersController extends Controller
      */
     public function create()
     {
+        // return response()->json('Create');
+        $divisions = Division::all();
+        $data = [
+            'url' => route('users.store'),
+            'divisions' => $divisions
+        ];
+        return view('admin.modal.create', $data);
     }
 
     /**
@@ -106,9 +113,6 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -118,7 +122,16 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-     //   
+        $user = User::findOrFail($id);
+        $data = [
+            'url' => route('users.update', $id),
+            'user' => $user,
+            'divisions' => Division::all()
+        ];
+
+
+        // return response()->json($user);
+        return view('admin.modal.edit', $data);
     }
 
     /**
@@ -128,14 +141,14 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id, UpdateUserRequest $request, SweetAlertFactory $flasher)
+    public function update($id, Request $request, SweetAlertFactory $flasher)
     {
         // return response()->json($request->name);
         $user = User::findOrFail($id);
         $data = [
-            'name' => $request->nameEdit,
-            'username' => $request->usernameEdit,
-            'division_id' => $request->divisionEdit
+            'name' => $request->name,
+            'username' => $request->username,
+            'division_id' => $request->division
         ];
         // return response()->json($data);
         // $data = ([
@@ -146,12 +159,12 @@ class UsersController extends Controller
 
         $user->update($data);
         // if ($user) {
-            $flasher->addSuccess('Data has been update successfully!');
-            // $flasher->iconColor('#ff000');
-            return redirect()->route('users.index');
+        $flasher->addSuccess('Data has been update successfully!');
+        // $flasher->iconColor('#ff000');
+        return redirect()->route('users.index');
         // }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -159,14 +172,48 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function showDestroy($id)
+    {
+        // return response()->json(User::findOrFail($id));
+        $data = [
+            'url' => route('users.destroy', $id)
+        ];
+        return view('admin.modal.delete', $data);
+    }
+
+
     public function destroy($id, SweetAlertFactory $flasher)
     {
         // return response()->json($id);
         $delete = User::destroy($id);
-        // if ($delete) {
-        $flasher->addSuccess('Data has been Delete successfully!');
-        // $flasher->iconColor('#ff0000');
-        return redirect()->route('users.index');
-        // }
+        if ($delete) {
+            $flasher->addSuccess('Data has been Delete successfully!');
+            // $flasher->iconColor('#ff0000');
+            return redirect()->route('users.index');
+        }
+    }
+
+    public function showReset($id)
+    {
+        $user = User::findOrFail($id);
+        $data = [
+            'user' => $user,
+            'url' => route('users.resetpassword', $id)
+        ];
+        return view('admin.modal.reset-password', $data);
+    }
+
+    public function resetPassword($id, SweetAlertFactory $flasher)
+    {
+        // return response()->json(User::findOrFail($id)->password);
+
+        $doneReset = User::whereId($id)->update([
+            'password' => Hash::make('password')
+        ]);
+        if ($doneReset) {
+            $flasher->addSuccess('Password has been reset successfully!');
+            return redirect()->route('users.index');
+        }
     }
 }

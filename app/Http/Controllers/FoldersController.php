@@ -16,6 +16,10 @@ use Illuminate\Support\Str;
 
 class FoldersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function EnterFolder($slug, SweetAlertFactory $flasher)
     {
         $folder = BaseFolder::where('slug', $slug)->first();

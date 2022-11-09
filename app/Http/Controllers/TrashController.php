@@ -33,35 +33,34 @@ class TrashController extends Controller
     public function showRestore($slug)
     {
         // return response()->json($slug);
-        $folder = BaseFolder::where('slug', $slug)->withTrashed()->first();
-        if (!$folder) {
-            $folder = Content::where('slug', $slug)->withTrashed()->first();
-        }
+        // $trash = BaseFolder::where('slug', $slug)->withTrashed()->first();
+        // if (!$trash) {
+        //     $trash = Content::where('slug', $slug)->withTrashed()->first();
+        // }
 
         $data = [
-            'folder' => $folder,
+            // 'trash' => $trash,
             'url' => route('trash.restore', $slug)
         ];
 
 
-        return view('folder.restore-folder', $data);
+        return view('trash.modal.restore', $data);
     }
 
     public function storeRestore($slug, SweetAlertFactory $flasher)
     {
-        $folder = BaseFolder::where('slug', $slug)->withTrashed()->first();
-        $route = route('trash.index');
-        if (!$folder) {
-            $folder = Content::where('slug', $slug)->withTrashed()->first();
-            $route = route('EnterFolder', $folder->contentable->slug);
+        $content = BaseFolder::where('slug', $slug)->withTrashed()->first();
+        // $route = route('trash.index');
+        if (!$content) {
+            $content = Content::where('slug', $slug)->withTrashed()->first();
+            // $route = route('EnterFolder', $content->contentable->slug);
         }
-        $doneRestore = $folder->restore();
+        $doneRestore = $content->restore();
         if ($doneRestore) {
-            activity()->causedBy(auth()->user())->performedOn($folder)->log('Restore Folder');
-            $flasher->addSuccess('Folder has been Restore successfully!');
+            activity()->causedBy(auth()->user())->performedOn($content)->log('Restore');
+            $flasher->addSuccess('Restore has been successfully!');
             return redirect()->route('trash.index');
         }
-        return response()->json($slug);
     }
 
     public function showForceDelete($slug)
@@ -71,36 +70,36 @@ class TrashController extends Controller
             'url' => route('trash.forcedelete', $slug)
         ];
 
-        return view('folder.forcedelete-folder', $data);
+        return view('trash.modal.forcedelete', $data);
     }
 
     public function storeForceDelete($slug, SweetAlertFactory $flasher)
     {
-        $folder = BaseFolder::where('slug', $slug)->withTrashed()->first();
-        $back = $folder;
-        if (!$folder) {
-            $folder = Content::where('slug', $slug)->withTrashed()->first();
-            $back = $folder;
-            $folder->deleteWithInnerFolder();
-            $done =  $folder->forceDelete();
+        $trash = BaseFolder::where('slug', $slug)->withTrashed()->first();
+        $back = $trash;
+        if (!$trash) {
+            $trash = Content::where('slug', $slug)->withTrashed()->first();
+            $back = $trash;
+            // return response()->json($trash);
+            if ($trash->type == 'file') {
+                $trash->getMedia('file')->first()->delete();
+            }
+            $trash->deleteWithInnerFolder();
+            $done =  $trash->forceDelete();
         } else {
-            $contentToDelete = Content::where('basefolder_id', $folder->id)->get();
+            $contentToDelete = Content::where('basefolder_id', $trash->id)->get();
             foreach ($contentToDelete as $content) {
                 if ($content->type == 'file') {
                     $media_content = $content->getMedia('file')->first();
                     $media_content->delete();
                 }
             }
-            $done =  $folder->forceDelete();
+            $done =  $trash->forceDelete();
         }
         if ($done) {
-            activity()->causedBy(auth()->user())->performedOn($back)->log('Delete Base Folder');
-            $flasher->addSuccess('Folder has been Delete successfully!');
-            // if (!$back->contentable) {
+            activity()->causedBy(auth()->user())->performedOn($back)->log('Force Delete');
+            $flasher->addSuccess('Delete has been successfully!');
             return redirect()->route('trash.index');
-            // } else {
-            //     return redirect()->route('EnterFolder', $back->contentable->slug);
-            // }
         }
     }
 }
