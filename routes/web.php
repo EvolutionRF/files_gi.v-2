@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\BaseFoldersController;
 use App\Http\Controllers\FilesController;
 use App\Http\Controllers\FoldersController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TrashController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+
+Route::get('/notification', [NotificationController::class, 'index'])->name('notif');
 Route::redirect('/home', '/dashboard');
 Route::redirect('/', '/dashboard');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');

@@ -22,7 +22,6 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         if ($request->division) {
-            // return response()->json($request->division);
             $users = User::where('division_id', $request->division)->fastPaginate(50);
         } else {
             $users = User::fastPaginate(50);

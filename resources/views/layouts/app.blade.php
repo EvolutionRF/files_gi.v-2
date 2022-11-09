@@ -75,8 +75,6 @@
                 modal.find(".modal-body-custom").load(url);
             });
 
-
-
             $(".right_modal").on("show.bs.modal", (event) => {
                 var button = $(event.relatedTarget);
                 var modal = $(this);
@@ -85,6 +83,13 @@
 
                 modal.find(".modal-title-custom").html(title);
                 modal.find(".modal-body-custom").load(url);
+            });
+
+            $(".notification").on("show.bs.dropdown", (event) => {
+                var button = $(event.relatedTarget);
+                var dropdown = $(this);
+                var url = button.data('url');
+                dropdown.find(".dropdown-body-custom").load(url);
             });
 
 

@@ -3,7 +3,6 @@
 @section('title', 'Data Users')
 
 @push('style')
-<!-- CSS Libraries -->
 <link rel="stylesheet" href="{{ asset('library/jqvmap/dist/jqvmap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.min.css') }}">
 @endpush
@@ -126,60 +125,23 @@
 </div>
 
 <x-modal.basic />
-
-
-
-
 @endsection
+
 
 @push('scripts')
 <script>
-    $(document).ready(function() {
-            $("#show_hide_password a").on('click', function(event) {
-                event.preventDefault();
-                if ($('#show_hide_password input').attr("type") == "text") {
-                    $('#show_hide_password input').attr('type', 'password');
-                    $('#show_hide_password i').addClass("fa-eye-slash");
-                    $('#show_hide_password i').removeClass("fa-eye");
-                } else if ($('#show_hide_password input').attr("type") == "password") {
-                    $('#show_hide_password input').attr('type', 'text');
-                    $('#show_hide_password i').removeClass("fa-eye-slash");
-                    $('#show_hide_password i').addClass("fa-eye");
-                }
-            });
-        });
+    const selectDivisionForm = document.querySelector('#select-division-form')
+    const selectDivisionInput = document.querySelector('#division-filter')
 
-        @if ($errors->first('name') || $errors->first('username') || $errors->first('divisions'))
-            $('#AddUser').modal('show');
-        @elseif ($errors->first('nameEdit') || $errors->first('usernameEdit') || $errors->first('divisionsEdit'))
-            $('#editUser').modal('show');
-        @endif
-
-        const selectDivisionForm = document.querySelector('#select-division-form')
-        const selectDivisionInput = document.querySelector('#division-filter')
-
-        selectDivisionInput.addEventListener('input', e => {
-            console.log()
-            if (selectDivisionInput.value != 0) {
-                selectDivisionForm.submit()
-            } else {
-                window.location.assign('{{ route('users.index') }}')
-            }
-        })
-
+    selectDivisionInput.addEventListener('input', e => {
+    console.log()
+    if (selectDivisionInput.value != 0) {
+        selectDivisionForm.submit()
+    } else {
+        window.location.assign('{{ route('users.index') }}')
+    }
+    })
 </script>
 
 
-<!-- JS Libraies -->
-{{-- <script src="{{ asset('library/simpleweather/jquery.simpleWeather.min.js') }}"></script> --}}
-{{-- <script src="{{ asset('library/chart.js/dist/Chart.min.js') }}"></script> --}}
-{{-- <script src="{{ asset('library/jqvmap/dist/jquery.vmap.min.js') }}"></script> --}}
-{{-- <script src="{{ asset('library/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script> --}}
-{{-- <script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script> --}}
-<script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
-<script src="{{ asset('js/page/bootstrap-modal.js') }}"></script>
-
-
-<!-- Page Specific JS File -->
-{{-- <script src="{{ asset('js/page/index-0.js') }}"></script> --}}
 @endpush
