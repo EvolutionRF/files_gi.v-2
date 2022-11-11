@@ -61,7 +61,7 @@ class FoldersController extends Controller
             'folders_accesses' => $access_folder,
             'folder' => $folder,
             'content_folder' => $folder->contents->where('type', 'folder'),
-            'content_file' => $folder->contents->where('type', 'file'),
+            'content_file' => $folder->contents->where('type', '!=', 'folder'),
             'permission' => $permission,
             'type_menu' => 'dashboard',
             'parents' => array_reverse($parents)

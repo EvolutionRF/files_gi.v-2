@@ -6,7 +6,7 @@
             onclick="cardClick('card-{{ $folder->id }}')" style="cursor: pointer">
             <div class="card-logo p-3">
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('EnterFolder', $folder->slug) }}">
+                    <div>
                         <div class="d-flex text-primary">
                             <div class="my-auto">
                                 <x-heroicon-s-folder-open style="width:40px" />
@@ -15,7 +15,7 @@
                                 <p class="mt-2 text-base">{{ $folder->name }}</p>
                             </div>
                         </div>
-                    </a>
+                    </div>
                     <div class="text-left">
                         <ul class="navbar-nav">
                             <li class="dropdown">

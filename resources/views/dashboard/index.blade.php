@@ -51,7 +51,7 @@
                 <div class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></div>
             </div>
         </div>
-        @include('dashboard._summary')
+        {{-- @include('dashboard._summary') --}}
         <div>
             <div class="form-group form-group-sm">
                 <div class="input-group">

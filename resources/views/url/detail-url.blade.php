@@ -11,8 +11,10 @@
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="content-detail" role="tabpanel" aria-labelledby="detail-tab">
         <div class="card-body text-center">
-            <p class="my-auto text-bold text-dark"><i class="fas fa-file"></i> {{ $file->name }}</p>
-            <small>{{ $file->getMedia('file')->first()->file_name }}</small>
+            <p class="my-auto text-bold text-dark">
+                <x-heroicon-s-link style="width:15px" />
+                {{ $url->name }}
+            </p>
         </div>
         <div class="fileproperties">
             <h6>File Properties</h6>
@@ -22,14 +24,14 @@
                         <p class="m-0">Type</p>
                         <p class="m-0">Owner</p>
                         <p class="m-0">Created at</p>
-                        <p class="mb-0">Size</p>
+                        {{-- <p class="mb-0">Size</p> --}}
                     </div>
 
                     <div class="text-left ml-3">
-                        <p class="mb-0"> {{ $file->isPrivate }}</p>
-                        <p class="mb-0">{{ $file->user->name }}</p>
-                        <p class="mb-0">{{ $file->created_at }}</p>
-                        <p>{{ $file->getMedia('file')->first()->human_readable_size }}</p>
+                        <p class="mb-0"> {{ $url->isPrivate }}</p>
+                        <p class="mb-0">{{ $url->user->name }}</p>
+                        <p class="mb-0">{{ $url->created_at }}</p>
+                        {{-- <p>{{ @$file->getMedia('file')->first()->human_readable_size }}</p> --}}
                     </div>
                 </div>
             </div>
@@ -38,7 +40,10 @@
 
     <div class="tab-pane fade show" id="content-activity" role="tabpanel" aria-labelledby="activity-tab">
         <div class="card-body">
-            <p style="margin: 20px;"><i class="fas fa-file"></i> Brief terupdate.docx</p>
+            <p style="margin: 20px;">
+                <x-heroicon-s-link style="width:10px" />
+                Brief terupdate.docx
+            </p>
         </div>
         <div class="card">
             <div class="dropdown" style="margin-bottom: 20px;">

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->enum('isPrivate', ['private', 'public'])->default('public');
             $table->morphs('contentable');
             $table->string('url')->nullable();
-            $table->enum('type', ['file', 'folder']);
+            $table->enum('type', ['file', 'folder', 'url']);
             $table->unsignedBigInteger('basefolder_id');
             $table->foreign('basefolder_id')->references('id')->on('base_folders')->onDelete('cascade');
             // $table->string('slug');

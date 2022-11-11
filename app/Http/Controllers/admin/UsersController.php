@@ -36,7 +36,7 @@ class UsersController extends Controller
         // $datas =  ['data' => $data];
         // return response()->json($data);
 
-        return view('admin.users', $data);
+        return view('admin.users.index', $data);
     }
 
     public function search(Request $request)
@@ -61,7 +61,7 @@ class UsersController extends Controller
                 return response()->json($output);
             }
         }
-        return view('admin.users');
+        return view('admin.users.index');
     }
 
     /**
@@ -77,7 +77,7 @@ class UsersController extends Controller
             'url' => route('users.store'),
             'divisions' => $divisions
         ];
-        return view('admin.modal.create', $data);
+        return view('admin.users.modal.create', $data);
     }
 
     /**
@@ -130,7 +130,7 @@ class UsersController extends Controller
 
 
         // return response()->json($user);
-        return view('admin.modal.edit', $data);
+        return view('admin.users.modal.edit', $data);
     }
 
     /**
@@ -178,7 +178,7 @@ class UsersController extends Controller
         $data = [
             'url' => route('users.destroy', $id)
         ];
-        return view('admin.modal.delete', $data);
+        return view('admin.users.modal.delete', $data);
     }
 
 
@@ -200,7 +200,7 @@ class UsersController extends Controller
             'user' => $user,
             'url' => route('users.resetpassword', $id)
         ];
-        return view('admin.modal.reset-password', $data);
+        return view('admin.users.modal.reset-password', $data);
     }
 
     public function resetPassword($id, SweetAlertFactory $flasher)

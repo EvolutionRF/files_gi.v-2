@@ -2,7 +2,8 @@
     @csrf
     @method('PUT')
     <div class="form-group">
-        <h6>Folder Name</h6>
+        <h6>{{ ($file->type == " file") ? "File"
+            : "URL" }} Name</h6>
         <div class="input-group mb-2">
             <div class="input-group-prepend">
                 <div class="input-group-text"><i class="fas fa-folder-plus"></i></div>

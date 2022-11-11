@@ -54,9 +54,6 @@ class FilesController extends Controller
         if (!$parent) {
             $parent = Content::where('slug', $slug)->first();
         }
-
-        // return response()->json()
-
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'user');
         })->where('id', '!=', auth()->user()->id)->get();
@@ -202,7 +199,7 @@ class FilesController extends Controller
             'url' => route('file.storerename', $slug)
         ];
 
-        return view('file.rename-folder', $data);
+        return view('file.rename-file', $data);
     }
 
     public function storeRename(Request $request, $slug, SweetAlertFactory $flasher)
@@ -236,15 +233,15 @@ class FilesController extends Controller
 
     public function storeDelete($slug, SweetAlertFactory $flasher)
     {
+        // return response()->json($slug);
         $file = Content::where('slug', $slug)->first();
         $back = $file;
         // $media_content = $file->getMedia('file')->first();
         // $done = $media_content->delete();
-
         $done = $file->delete();
         if ($done) {
-            activity()->causedBy(auth()->user())->performedOn($back)->log('Delete File');
-            $flasher->addSuccess('File has been Delete successfully!');
+            activity()->causedBy(auth()->user())->performedOn($back)->log('Delete Content');
+            $flasher->addSuccess('Content has been Delete successfully!');
             return redirect()->route('EnterFolder', $back->contentable->slug);
         }
     }

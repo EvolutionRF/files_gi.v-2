@@ -92,6 +92,11 @@
                                     data-url="{{ route('file.showcreate',$folder->slug) }}">
                                     <x-heroicon-s-document style="width:15px" class="ml-0" /> File
                                 </a>
+                                <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
+                                    data-target=".show-modal" data-title="URL"
+                                    data-url="{{ route('url.showcreate',$folder->slug) }}">
+                                    <x-heroicon-s-link style="width:15px" class="ml-0" /> Url
+                                </a>
                             </div>
                         </li>
                     </div>

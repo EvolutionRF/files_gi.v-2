@@ -8,7 +8,6 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        // return response()->json('Masuk');
         return view('components.notification');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\FilesController;
 use App\Http\Controllers\FoldersController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TrashController;
+use App\Http\Controllers\URLController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -74,7 +75,6 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
     Route::get('/create/{slug}', 'showCreate')->name('file.showcreate');
     Route::POST('/store', 'storeCreate')->name('file.storecreate');
 
-
     Route::get('/show/{slug}', 'showDetail')->name('file.showdetail');
 
     Route::get('/manage/{slug}', 'showManage')->name('file.showmanage');
@@ -89,6 +89,13 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
 
     Route::get('/download/{slug}', 'showDownloadFile')->name('file.showdownload');
     Route::get('/download-file/{slug}', 'downloadFile')->name('file.download');
+});
+
+Route::controller(URLController::class)->prefix('url')->group(function () {
+    Route::get('/create/{slug}', 'showCreate')->name('url.showcreate');
+    Route::POST('/store', 'storeCreate')->name('url.storecreate');
+
+    Route::get('/show/{slug}', 'showDetail')->name('url.showdetail');
 });
 
 Route::controller(TrashController::class)->prefix('trash')->group(function () {

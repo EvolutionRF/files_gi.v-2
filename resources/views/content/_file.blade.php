@@ -11,7 +11,8 @@
             @foreach($content_file as $file)
             <tr>
                 <td>
-                    @if ($file->getMedia('file')->first()->mime_type ==
+                    @if($file->type =='file')
+                    @if (@$file->getMedia('file')->first()->mime_type ==
                     'image/png'|| $file->getMedia('file')->first()->mime_type ==
                     'image/jpg'||$file->getMedia('file')->first()->mime_type == 'image/jpeg')
                     <x-heroicon-s-photo style="width:15px" class="ml-0" />
@@ -23,6 +24,14 @@
                         data-url="{{ route('file.showdownload', $file->slug) }}">
                         {{ $file->name }}
                     </a>
+                    @else
+                    <x-heroicon-s-link style="width:15px" class="ml-0" />
+                    <a href="" type="button" data-toggle="modal" data-target=".show-modal" data-title="URL" data-url="">
+                        {{ $file->name }}
+                    </a>
+                    @endif
+
+
                 </td>
                 <td>{{ $file->user->name }}</td>
                 {{-- <td>{{ @$file->getMedia('file')->first()->updated_at->diffForHumans() }}</td> --}}
@@ -36,27 +45,30 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right ml-0">
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target=".right_modal" data-title="Detail File"
-                                    data-url="{{ route('file.showdetail', $file->slug) }}">
+                                    data-target=".right_modal" data-title="Detail {{ ($file->type == " file") ? "File"
+                                    : "URL" }}" data-url={{ ($file->type == "file") ? route('file.showdetail',
+                                    $file->slug) : route('url.showdetail',
+                                    $file->slug) }}>
                                     <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
                                     Detail
                                 </a>
                                 @if($file->owner_id == auth()->user()->id)
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target=".show-modal" data-title="Manage File {{ $file->name }}"
+                                    data-target=".show-modal" data-title="Manage {{ ($file->type == " file") ? "File"
+                                    : "URL" }} {{ $file->name }}"
                                     data-url="{{ route('file.showmanage', $file->slug) }}">
                                     <x-heroicon-s-cog-8-tooth style="width:15px" class="ml-0" />
                                     Manage
                                 </a>
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target=".show-modal" data-title="Rename Folder"
-                                    data-url="{{ route('file.showrename', $file->slug) }}">
+                                    data-target=".show-modal" data-title="Rename {{ ($file->type == " file") ? "File"
+                                    : "URL" }}" data-url="{{ route('file.showrename', $file->slug) }}">
                                     <x-heroicon-s-pencil-square style="width:15px" class="ml-0" />
                                     Rename
                                 </a>
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target=".show-modal" data-title="Delete Folder"
-                                    data-url="{{ route('file.showdelete', $file->slug) }}">
+                                    data-target=".show-modal" data-title="Delete {{ ($file->type == " file") ? "File"
+                                    : "URL" }}" data-url="{{ route('file.showdelete', $file->slug) }}">
                                     <x-heroicon-s-trash style="width:15px" class="ml-0" /> Delete
                                 </a>
                                 @else
