@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 
 class BaseFolderAccess extends Model
 {
     protected $table = 'base_folders_accesses';
     protected $fillable = ['basefolder_id', 'permission_id', 'user_id', 'status'];
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public function user()
     {

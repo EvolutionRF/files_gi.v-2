@@ -4,6 +4,9 @@ use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\BaseFoldersController;
 use App\Http\Controllers\FilesController;
 use App\Http\Controllers\FoldersController;
+use App\Http\Controllers\FoldersharedController;
+use App\Http\Controllers\SharedController;
+use App\Http\Controllers\TrashController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -69,8 +72,19 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
     Route::DELETE('/delete/{slug}', 'storeDelete')->name('file.delete');
 });
 
+Route::controller(TrashController::class)->prefix('trash')->group(function () {
+    Route::get('/', 'index')->name('trash.index');
+});
 
 Route::get('/request/{id}', [FoldersController::class, 'askRequest'])->name('request');
-Route::GET('/trash', function () {
-    return view('Trash.index', ['type_menu' => 'index']);
+Route::GET('/Trash', function () {
+    return view('trash.index', ['type_menu' => 'index']);
 })->name('index');
+
+Route::controller(SharedController::class)->prefix('shared')->group(function () {
+    Route::get('/shared', 'index')->name('shared.share');
+});
+
+Route::controller(FoldersharedController::class)->prefix('shared')->group(function () {
+    Route::get('/foldershared', 'index')->name('shared.foldershared');
+});

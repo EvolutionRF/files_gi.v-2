@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContentAccess extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'accesses';
     protected $fillable = ['content_id', 'permission_id', 'user_id', 'status'];
 
