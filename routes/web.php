@@ -109,4 +109,10 @@ Route::controller(TrashController::class)->prefix('trash')->group(function () {
 });
 
 
-Route::get('/request/{id}', [FoldersController::class, 'askRequest'])->name('request');
+Route::controller(NotificationController::class)->prefix('notification')->group(function () {
+    Route::get('/request/{slug}',  'request')->name('request');
+    Route::post('/request/{slug}',  'storeRequest')->name('request.store');
+
+    Route::PUT('/base-request/status/{id}',  'BaseRequestHandler')->name('base-request.status');
+    Route::PUT('/content-request/status/{id}',  'ContentRequestHandler')->name('content-request.status');
+});

@@ -21,7 +21,6 @@ class RequestAccess
      */
     public function __construct()
     {
-        //
     }
 
     /**

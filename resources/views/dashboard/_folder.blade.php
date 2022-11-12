@@ -59,7 +59,7 @@
                                     @else
                                     <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
                                         data-target=".show-modal" data-title="Ask Request"
-                                        data-url="{{ route('request',$baseFolder->id) }}">
+                                        data-url="{{ route('request',$baseFolder->slug) }}">
                                         <x-heroicon-s-pencil-square style="width:15px" class="ml-0" />
                                         Ask Request
                                     </a>

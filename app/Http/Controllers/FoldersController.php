@@ -40,6 +40,7 @@ class FoldersController extends Controller
             }
             $baseFolder = BaseFolder::find($folder->basefolder_id);
             $access_folder = $folder->access;
+
             $result = $folder->contentable;
             if ($result == "") {
                 return response()->json('ERROR');
@@ -84,7 +85,7 @@ class FoldersController extends Controller
                     } else {
                         if ($access_folder) {
                             foreach ($access_folder as $access) {
-                                if (auth()->user()->id == $access->user_id) {
+                                if (auth()->user()->id == $access->user_id && $access->status == 'accept') {
                                     return view('content.index', $data);
                                 }
                             }
@@ -348,13 +349,15 @@ class FoldersController extends Controller
     {
         $folder = BaseFolder::where('slug', $slug)->first();
         if ($folder) {
-            $user_manage = $folder->base_folders_accesses->pluck('user_id');
-            $have_access = $folder->base_folders_accesses;
+            $user_manage = $folder->base_folders_accesses->where('status', 'accept')->pluck('user_id');
+            $have_access = $folder->base_folders_accesses->where('status', 'accept');
         } else {
             $folder = Content::where('slug', $slug)->first();
-            $user_manage = $folder->access->pluck('user_id');
-            $have_access = $folder->access;
+            $user_manage = $folder->access->where('status', 'accept')->pluck('user_id');
+            $have_access = $folder->access->where('status', 'accept');
         }
+
+        // return response()->json($have_access);
 
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'user');
