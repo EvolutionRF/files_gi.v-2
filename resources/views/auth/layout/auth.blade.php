@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>@yield('title') &mdash; Stisla</title>
+    <title>@yield('title') &mdash; Files Guru Inovatif</title>
+    <link rel="icon" href="{{ asset('img/icon/gi-icon.png') }}">
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('library/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -35,20 +36,22 @@
 <body>
     <div id="app">
         <section class="section">
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="mx-auto">
-                        <!-- Footer -->
-                        @include('components.auth-header')
+            <section class="section">
+                <div class="container mt-5">
+                    <div class="d-flex justify-content-center row">
+                        <div class="col-12 col-sm-8 col-md-8 col-lg-6 col-xl-5 ">
+                            <!-- Footer -->
+                            @include('components.auth-header')
 
-                        <!-- Content -->
-                        @yield('main')
+                            <!-- Content -->
+                            @yield('main')
 
-                        <!-- Footer -->
-                        @include('components.auth-footer')
+                            <!-- Footer -->
+                            @include('components.auth-footer')
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </section>
     </div>
 

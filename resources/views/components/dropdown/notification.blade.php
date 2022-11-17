@@ -1,10 +1,6 @@
 <div class="dropdown-menu dropdown-list dropdown-menu-right notification">
     @stack('header')
-
     <div class="dropdown-header">Notifications
-        <div class="float-right">
-            <a href="#">Mark All As Read</a>
-        </div>
     </div>
     <div class="dropdown-list-content dropdown-list-icons">
         <div class="dropdown-body-custom">

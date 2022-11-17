@@ -43,46 +43,9 @@
 @endpush
 
 @section('main')
-<div class="main-content">
-    <section class="section">
-        <div class="section-header">
-            <h1>Dashboard</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-            </div>
-        </div>
-        {{-- @include('dashboard._summary') --}}
-        <div>
-            <div class="form-group form-group-sm">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <x-heroicon-s-magnifying-glass style="width:15px" />
-                        </div>
-                    </div>
-                    <input type="search" class="form-control">
-                    <button class="btn btn-primary btn-sm btn-icon" data-toggle="modal" data-target=".show-modal"
-                        data-title="Create Folder" data-url="{{ route('folder.create') }}">
-                        <x-heroicon-s-plus style="width:15px" />
-                        <span>
-                            Create
-                        </span>
-                    </button>
-                </div>
-            </div>
 
-        </div>
 
-        <h2 class="section-title row">
-            Base Folder
-        </h2>
-        @include('dashboard._folder')
-    </section>
-</div>
-
-<x-modal.basic />
-
-<x-modal.detail />
+<livewire:home-index />
 
 
 @endsection

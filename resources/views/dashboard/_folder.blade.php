@@ -1,7 +1,6 @@
 <div class="row sortable-card">
     @foreach ($baseFolders as $baseFolder)
     <div class="col-12 col-md-6 col-lg-4">
-
         <div class="card card-secondary cardClick" id="card-{{ $baseFolder->id }}"
             onclick="cardClick('card-{{ $baseFolder->id }}')" style="cursor: pointer">
             <div class="card-logo p-3">
@@ -91,4 +90,3 @@
     </div>
     @endforeach
 </div>
-{{ $baseFolders->links() }}

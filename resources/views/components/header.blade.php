@@ -10,7 +10,7 @@
     <ul class="navbar-nav navbar-right">
         <li class="dropdown dropdown-list-toggle">
             <a href="#" data-toggle="dropdown" data-target=".notification"
-                class="nav-link notification-toggle nav-link-lg beep" data-url="{{ route('notif') }}"><i
+                class="nav-link notification-toggle nav-link-lg" data-url="{{ route('notif') }}"><i
                     class="far fa-bell"></i></a>
 
             <x-dropdown.notification />
