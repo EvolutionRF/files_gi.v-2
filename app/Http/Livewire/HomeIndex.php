@@ -46,6 +46,6 @@ class HomeIndex extends Component
         $data = [
             'baseFolders' => $baseFolders->paginate(6)
         ];
-        return view('livewire.dashboard.home-index', $data);
+        return view('livewire.home-index', $data);
     }
 }

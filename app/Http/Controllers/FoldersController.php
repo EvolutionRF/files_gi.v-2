@@ -24,7 +24,6 @@ class FoldersController extends Controller
     {
         $folder = BaseFolder::where('slug', $slug)->first();
         $baseFolder = "";
-        $permission = Permission::all();
         $parents = array();
         if ($folder) {
             $access_folder = $folder->base_folders_accesses;
@@ -34,39 +33,18 @@ class FoldersController extends Controller
             );
         } else {
             $folder = Content::where('slug', $slug)->first();
-            // return response()->json($slug);
             if ($folder == "") {
                 return response()->json('Folder Deleted');
             }
             $baseFolder = BaseFolder::find($folder->basefolder_id);
-            $access_folder = $folder->access;
-
-            $result = $folder->contentable;
-            if ($result == "") {
-                return response()->json('ERROR');
-            }
-            $count = 0;
-            do {
-                //
-                $parents[$count] = array(
-                    'slug'  => $result->slug,
-                    'name'  => $result->name,
-                );
-                $result = $result->contentable;
-                $count++;
-            } while ($result != null);
         }
 
         $data = [
-            'baseFolder' => $baseFolder,
-            'folders_accesses' => $access_folder,
             'folder' => $folder,
-            'content_folder' => $folder->contents->where('type', 'folder'),
-            'content_file' => $folder->contents->where('type', '!=', 'folder'),
-            'permission' => $permission,
+            'slug' => $slug,
             'type_menu' => 'dashboard',
-            'parents' => array_reverse($parents)
         ];
+
 
         if (auth()->user()) {
             if (auth()->user()->getRoleNames()->first() == "admin") {
@@ -90,7 +68,6 @@ class FoldersController extends Controller
                                 }
                             }
                         }
-
                         if ($baseFolder) {
                             $flasher->addError('You Dont have access');
                             return redirect()->route('EnterFolder', $folder->contentable->slug);
@@ -146,7 +123,6 @@ class FoldersController extends Controller
             $parent = "";
         }
 
-
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'user');
         })->where('id', '!=', auth()->user()->id)->get();
@@ -158,6 +134,7 @@ class FoldersController extends Controller
             'permissions' => $permissions,
             'parent' => $parent
         ];
+
         if ($parent == "") {
             return view('folder.create-folder', $data);
         } else {
@@ -173,11 +150,11 @@ class FoldersController extends Controller
                         if ($access_folder) {
                             foreach ($access_folder as $access) {
                                 if (auth()->user()->id == $access->user_id && $access->permission_id == 2) {
-                                    return view('folder.create-folder', $data);
+                                    return view('request.access-request', $parent->slug);
                                 }
                             }
-                            // $flasher->addError('You Dont have access');
-                            return view('folder.ask-request', $data);
+
+                            return view('request.access-request', $parent->slug);
                         }
                     }
                 }

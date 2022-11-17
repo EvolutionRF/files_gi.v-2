@@ -93,8 +93,6 @@ class NotificationController extends Controller
 
     public function storeRequest(Request $request, $slug, SweetAlertFactory $flasher)
     {
-
-
         $folder = BaseFolder::where('slug', $slug)->first();
         $done = "";
         if (!$folder) {
