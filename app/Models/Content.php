@@ -48,7 +48,11 @@ class Content extends Model implements HasMedia
                 $content->deleteWithInnerFolder();
             }
         }
-
         $this->delete();
+    }
+
+    public function getFolder()
+    {
+        return $this->contents->where('type', 'folder');
     }
 }

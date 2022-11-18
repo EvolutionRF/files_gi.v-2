@@ -45,6 +45,7 @@ class FoldersController extends Controller
             'type_menu' => 'dashboard',
         ];
 
+        // return response()->json(count());
 
         if (auth()->user()) {
             if (auth()->user()->getRoleNames()->first() == "admin") {
@@ -135,6 +136,8 @@ class FoldersController extends Controller
             'parent' => $parent
         ];
 
+
+
         if ($parent == "") {
             return view('folder.create-folder', $data);
         } else {
@@ -150,11 +153,11 @@ class FoldersController extends Controller
                         if ($access_folder) {
                             foreach ($access_folder as $access) {
                                 if (auth()->user()->id == $access->user_id && $access->permission_id == 2) {
-                                    return view('request.access-request', $parent->slug);
+                                    return view('folder.create-folder', $data);
                                 }
                             }
-
-                            return view('request.access-request', $parent->slug);
+                            $data['url'] = route('request.store', $slug);
+                            return view('request.access-request', $data);;
                         }
                     }
                 }

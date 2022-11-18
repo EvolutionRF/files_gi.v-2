@@ -27,7 +27,7 @@
                                 <x-heroicon-s-magnifying-glass style="width:15px" />
                             </div>
                         </div>
-                        <input type="search" class="form-control">
+                        <input type="search" class="form-control" wire:model="search">
 
                         <div class="navbar-nav">
 
@@ -66,6 +66,7 @@
         @if((count($content_folder) >= 1) || (count($content_file) >= 1) )
         @if((count($content_folder) >= 1))
         @include('content._folder')
+        {{ $content_folder->links() }}
         @else
         <div class="text-center">
             <p class="text-dark">There are no folder here </p>
@@ -75,6 +76,8 @@
         <hr>
         @if((count($content_file) >= 1))
         @include('content._file')
+        {{ $content_file->links() }}
+
         @else
         <div class="text-center">
             <p class="text-dark">There are no files here </p>
