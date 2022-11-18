@@ -11,7 +11,22 @@
             @foreach($trashcontentFile as $file)
             <tr>
                 <td>
-                    <x-heroicon-s-document style="width:15px" class="ml-0" /> {{ $file->name }}
+                    @if($file->type =='file')
+                    @if (@$file->getMedia('file')->first()->mime_type ==
+                    'image/png'|| $file->getMedia('file')->first()->mime_type ==
+                    'image/jpg'||$file->getMedia('file')->first()->mime_type == 'image/jpeg')
+                    <x-heroicon-s-photo style="width:15px" class="ml-0" />
+                    @else
+                    <x-heroicon-s-document style="width:15px" class="ml-0" />
+                    @endif
+
+                    {{ $file->name }}
+                    @else
+                    <x-heroicon-s-link style="width:15px" class="ml-0" />
+                    {{ $file->name }}
+                    @endif
+                    {{--
+                    <x-heroicon-s-document style="width:15px" class="ml-0" /> --}}
                 </td>
                 <td>{{ $file->user->name }}</td>
                 {{-- <td>{{ @$file->getMedia('file')->first()->updated_at->diffForHumans() }}</td> --}}
@@ -25,7 +40,10 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right ml-0">
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                    data-target=".right_modal" data-title="Detail File" data-url="">
+                                    data-target=".right_modal" data-title="Detail {{ ($file->type == " file") ? "File"
+                                    : "URL" }}" data-url={{ ($file->type == "file") ? route('file.showdetail',
+                                    $file->slug) : route('url.showdetail',
+                                    $file->slug) }}>
                                     <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
                                     Detail
                                 </a>

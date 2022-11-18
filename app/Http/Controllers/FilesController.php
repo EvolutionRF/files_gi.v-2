@@ -122,7 +122,7 @@ class FilesController extends Controller
     {
 
         // return response()->json($slug);
-        $file = Content::where('slug', $slug)->first();
+        $file = Content::where('slug', $slug)->withTrashed()->first();
 
 
         $data = [
@@ -250,10 +250,6 @@ class FilesController extends Controller
     {
 
         $file = Content::where('slug', $slug)->first();
-        // $media = $file->getFirstMedia('file');
-        // return response()->json($media);
-
-
         $data = [
             'file' => $file,
             // 'media' => $media

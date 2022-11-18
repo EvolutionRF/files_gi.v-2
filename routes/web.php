@@ -96,6 +96,7 @@ Route::controller(URLController::class)->prefix('url')->group(function () {
     Route::POST('/store', 'storeCreate')->name('url.storecreate');
 
     Route::get('/show/{slug}', 'showDetail')->name('url.showdetail');
+    Route::get('/get/{slug}', 'showURL')->name('url.showurl');
 });
 
 Route::controller(TrashController::class)->prefix('trash')->group(function () {

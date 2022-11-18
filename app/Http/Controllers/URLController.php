@@ -55,7 +55,7 @@ class URLController extends Controller
         $content->type = 'url';
         $content->owner_id = auth()->user()->id;
         $content->slug = Str::random(32);
-        $content->url = $request->url;
+        $content->url = $request->link;
         $content->basefolder_id = $baseFolder_id;
         $content->isPrivate = $request->isPrivate;
         $data = [
@@ -86,12 +86,11 @@ class URLController extends Controller
         }
     }
 
-
     public function showDetail($slug)
     {
 
         // return response()->json($slug);
-        $url = Content::where('slug', $slug)->first();
+        $url = Content::where('slug', $slug)->withTrashed()->first();
 
 
         $data = [
@@ -99,5 +98,18 @@ class URLController extends Controller
         ];
 
         return view('url.detail-url', $data);
+    }
+
+
+    public function showURL($slug)
+    {
+        $url = Content::where('slug', $slug)->first();
+
+        // return response()->json($slug);
+        $data = [
+            'Url' => $url,
+        ];
+
+        return view('url.show-url', $data);
     }
 }

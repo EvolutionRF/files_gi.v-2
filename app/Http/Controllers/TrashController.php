@@ -18,7 +18,7 @@ class TrashController extends Controller
     {
         $trashBase = BaseFolder::where('owner_id', auth()->user()->id)->onlyTrashed()->latest()->get();
         $trashcontentFolder = Content::where('owner_id', auth()->user()->id)->where('type', 'folder')->onlyTrashed();
-        $trashcontentFile  = Content::where('owner_id', auth()->user()->id)->where('type', 'file')->onlyTrashed();
+        $trashcontentFile  = Content::where('owner_id', auth()->user()->id)->where('type', '!=', 'folder')->onlyTrashed();
         $data = [
             'type_menu' => 'Trash',
             'trashBase' => $trashBase,

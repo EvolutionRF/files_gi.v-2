@@ -26,15 +26,14 @@
                     </a>
                     @else
                     <x-heroicon-s-link style="width:15px" class="ml-0" />
-                    <a href="" type="button" data-toggle="modal" data-target=".show-modal" data-title="URL" data-url="">
+                    <a href="" type="button" data-toggle="modal" data-target=".show-modal" data-title="URL"
+                        data-url="{{ route('url.showurl',$file->slug) }}">
                         {{ $file->name }}
                     </a>
                     @endif
 
-
                 </td>
                 <td>{{ $file->user->name }}</td>
-                {{-- <td>{{ @$file->getMedia('file')->first()->updated_at->diffForHumans() }}</td> --}}
                 <td>{{ $file->updated_at->diffForHumans() }}</td>
                 <td>{{ $file->isPrivate }}</td>
                 <td class="text-center">
