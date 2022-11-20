@@ -22,7 +22,7 @@
         @else
         <ul class="sidebar-menu">
             <li class="{{ $type_menu === 'myFiles' ? 'active' : '' }}">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route('myFiles') }}">
                     <x-heroicon-s-folder-open style="max-width:20px" />
                     <span class="ml-2">My Files</span>
                 </a>

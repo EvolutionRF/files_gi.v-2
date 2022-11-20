@@ -28,6 +28,7 @@ Route::get('/notification', [NotificationController::class, 'index'])->name('not
 Route::redirect('/home', '/dashboard');
 Route::redirect('/', '/dashboard');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+Route::get('/myFiles', [App\Http\Controllers\MyFilesController::class, 'myFiles'])->name('myFiles');
 
 
 Route::controller(UsersController::class)->prefix('admin/users')->middleware('role:admin')->group(function () {
