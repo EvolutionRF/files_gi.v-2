@@ -117,3 +117,4 @@ Route::controller(NotificationController::class)->prefix('notification')->group(
     Route::PUT('/base-request/status/{id}',  'BaseRequestHandler')->name('base-request.status');
     Route::PUT('/content-request/status/{id}',  'ContentRequestHandler')->name('content-request.status');
 });
+
