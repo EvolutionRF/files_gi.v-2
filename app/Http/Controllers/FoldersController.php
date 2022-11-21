@@ -20,6 +20,7 @@ class FoldersController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function EnterFolder($slug, SweetAlertFactory $flasher)
     {
         $folder = BaseFolder::where('slug', $slug)->first();
@@ -37,6 +38,7 @@ class FoldersController extends Controller
                 return response()->json('Folder Deleted');
             }
             $baseFolder = BaseFolder::find($folder->basefolder_id);
+            $access_folder = $folder->access;
         }
 
         $data = [

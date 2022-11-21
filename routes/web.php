@@ -5,6 +5,7 @@ use App\Http\Controllers\BaseFoldersController;
 use App\Http\Controllers\FilesController;
 use App\Http\Controllers\FoldersController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SharedController;
 use App\Http\Controllers\TrashController;
 use App\Http\Controllers\URLController;
 use Illuminate\Support\Facades\Auth;
@@ -51,8 +52,8 @@ Route::controller(UsersController::class)->prefix('admin/users')->middleware('ro
 
 
 
-Route::controller(FoldersController::class)->prefix('folder')->group(function () {
-    Route::get('/folders/{slug}', 'EnterFolder')->name('EnterFolder');
+Route::controller(FoldersController::class)->prefix('folders')->group(function () {
+    Route::get('/{slug}', 'EnterFolder')->name('EnterFolder');
 
 
     Route::get('/show/{slug}', 'showDetail')->name('folder.show');
@@ -116,4 +117,10 @@ Route::controller(NotificationController::class)->prefix('notification')->group(
 
     Route::PUT('/base-request/status/{id}',  'BaseRequestHandler')->name('base-request.status');
     Route::PUT('/content-request/status/{id}',  'ContentRequestHandler')->name('content-request.status');
+});
+
+
+Route::controller(SharedController::class)->prefix('shared')->group(function () {
+
+    Route::get('/', 'index')->name('shared.index');
 });

@@ -9,7 +9,7 @@
         </div>
 
         <ul class="sidebar-menu mt-5">
-            <li class="{{ $type_menu === 'dashboard' ? 'active' : '' }}">
+            <li class="{{ $type_menu === 'dashboard' && !Request()->isShared ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('dashboard')}}">
                     <x-heroicon-s-home style="max-width:20px" />
                     <span class="ml-2">Dashboard</span>
@@ -30,8 +30,8 @@
         </ul>
 
         <ul class="sidebar-menu">
-            <li class="{{ $type_menu === 'Shared' ? 'active' : '' }}">
-                <a class="nav-link" href="">
+            <li class="{{ $type_menu === 'Shared' || Request()->isShared ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('shared.index') }}">
                     <x-heroicon-s-user style="max-width:20px" />
                     <span class="ml-2">Shared</span>
                 </a>
