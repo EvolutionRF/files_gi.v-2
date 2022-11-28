@@ -112,4 +112,22 @@ class URLController extends Controller
 
         return view('url.show-url', $data);
     }
+
+    public function storeUpdate($slug, Request $request, SweetAlertFactory $flasher)
+    {
+        // dd($request->link);
+        $content = Content::where('slug', $slug)->first();
+        // dd($content->contentable->slug);
+        $route = route('EnterFolder', $content->contentable->slug);
+        $data = [
+            'url' => $request->link,
+        ];
+
+        $doneUpdate = $content->update($data);
+        if ($doneUpdate) {
+            activity()->causedBy(auth()->user())->performedOn($content)->log('Update Link');
+            $flasher->addSuccess('File has been Updated successfully!');
+            return redirect($route);
+        }
+    }
 }

@@ -60,6 +60,12 @@
                                     Manage
                                 </a>
                                 <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
+                                    data-target=".show-modal" data-title="Update {{ ($file->type == " file") ? "File"
+                                    : "URL" }}" data-url="{{ route('file.showupdate', $file->slug) }}">
+                                    <x-heroicon-s-arrow-path style="width:15px" class="ml-0" />
+                                    Update
+                                </a>
+                                <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
                                     data-target=".show-modal" data-title="Rename {{ ($file->type == " file") ? "File"
                                     : "URL" }}" data-url="{{ route('file.showrename', $file->slug) }}">
                                     <x-heroicon-s-pencil-square style="width:15px" class="ml-0" />

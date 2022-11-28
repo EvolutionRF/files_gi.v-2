@@ -23,6 +23,7 @@ class FoldersController extends Controller
 
     public function EnterFolder($slug, SweetAlertFactory $flasher)
     {
+        // dd('test');
         $folder = BaseFolder::where('slug', $slug)->first();
         $baseFolder = "";
         $parents = array();
@@ -41,13 +42,14 @@ class FoldersController extends Controller
             $access_folder = $folder->access;
         }
 
+        // return response()->json(Request()->isShared);
+
         $data = [
             'folder' => $folder,
             'slug' => $slug,
             'type_menu' => 'dashboard',
         ];
 
-        // return response()->json(count());
 
         if (auth()->user()) {
             if (auth()->user()->getRoleNames()->first() == "admin") {
@@ -86,7 +88,6 @@ class FoldersController extends Controller
             return redirect()->route('dashboard');
         }
     }
-
 
 
     public function showDetail($slug)
@@ -129,6 +130,7 @@ class FoldersController extends Controller
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'user');
         })->where('id', '!=', auth()->user()->id)->get();
+
         $permissions = Permission::all();
 
         $data = [
@@ -379,7 +381,6 @@ class FoldersController extends Controller
             if ($request->isPrivate == 'public') {
                 ContentAccess::where('content_id', $folder->id)->delete();
             } else {
-
                 if ($request->invitedUser) {
                     ContentAccess::create($dataAcccess);
                 }

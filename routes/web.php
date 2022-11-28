@@ -29,6 +29,7 @@ Route::get('/notification', [NotificationController::class, 'index'])->name('not
 Route::redirect('/home', '/dashboard');
 Route::redirect('/', '/dashboard');
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+Route::get('/myFiles', [App\Http\Controllers\MyFilesController::class, 'myFiles'])->name('myFiles');
 
 
 Route::controller(UsersController::class)->prefix('admin/users')->middleware('role:admin')->group(function () {
@@ -53,16 +54,16 @@ Route::controller(UsersController::class)->prefix('admin/users')->middleware('ro
 
 
 Route::controller(FoldersController::class)->prefix('folders')->group(function () {
-    Route::get('/{slug}', 'EnterFolder')->name('EnterFolder');
+    Route::get('/create/{slug?}', 'create')->name('folder.create');
 
+
+    Route::get('/{slug}', 'EnterFolder')->name('EnterFolder');
 
     Route::get('/show/{slug}', 'showDetail')->name('folder.show');
 
     Route::get('/rename/{slug}', 'showRename')->name('folder.rename');
     Route::PUT('/storerename/{slug}', 'storeRename')->name('folder.storerename');
 
-
-    Route::get('/create/{slug?}', 'create')->name('folder.create');
     Route::POST('/store', 'store')->name('folder.store');
 
     Route::get('/delete/{slug}', 'showDelete')->name('folder.showdelete');
@@ -87,6 +88,9 @@ Route::controller(FilesController::class)->prefix('file')->group(function () {
     Route::get('/delete/{slug}', 'showDelete')->name('file.showdelete');
     Route::DELETE('/delete/{slug}', 'storeDelete')->name('file.delete');
 
+    Route::get('/update/{slug}', 'showUpdate')->name('file.showupdate');
+    Route::PUT('/update/{slug}', 'storeUpdate')->name('file.storeupdate');
+
 
     Route::get('/download/{slug}', 'showDownloadFile')->name('file.showdownload');
     Route::get('/download-file/{slug}', 'downloadFile')->name('file.download');
@@ -98,6 +102,7 @@ Route::controller(URLController::class)->prefix('url')->group(function () {
 
     Route::get('/show/{slug}', 'showDetail')->name('url.showdetail');
     Route::get('/get/{slug}', 'showURL')->name('url.showurl');
+    Route::PUT('/update/{slug}', 'storeUpdate')->name('url.storeupdate');
 });
 
 Route::controller(TrashController::class)->prefix('trash')->group(function () {

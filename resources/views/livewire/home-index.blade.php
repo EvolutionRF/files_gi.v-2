@@ -17,7 +17,7 @@
                         </div>
                         <input type="search" class="form-control" wire:model="search">
                         <button class="btn btn-primary btn-sm btn-icon" data-toggle="modal" data-target=".show-modal"
-                            data-title="Create Folder" data-url="{{ route('folder.create') }}">
+                            data-title="Create Folder" data-url="{{ route('folder.create',"") }}">
                             <x-heroicon-s-plus style="width:15px" />
                             <span>
                                 Create

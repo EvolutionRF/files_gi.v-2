@@ -30,6 +30,7 @@ class HomeController extends Controller
         $data = [
             'type_menu' => 'dashboard',
         ];
+
         return view('dashboard.index', $data);
     }
 }

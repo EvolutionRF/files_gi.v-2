@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Content extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, SoftDeletes;
-    protected $fillable = ['name', 'isPrivate'];
+    protected $fillable = ['name', 'isPrivate', 'url'];
 
     public function user()
     {

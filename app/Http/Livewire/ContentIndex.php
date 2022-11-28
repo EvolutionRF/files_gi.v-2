@@ -33,6 +33,7 @@ class ContentIndex extends Component
     public function render()
     {
         $folder = BaseFolder::where('slug', $this->slug)->first();
+        // dd($this->slug);
         $parents = array();
         if ($folder) {
             $parents[0] =  array(
@@ -41,6 +42,7 @@ class ContentIndex extends Component
             );
         } else {
             $folder = Content::where('slug', $this->slug)->first();
+            // dd($folder);
             $result = $folder->contentable;
             if ($result == "") {
                 return response()->json('ERROR');
@@ -55,6 +57,7 @@ class ContentIndex extends Component
                 $count++;
             } while ($result != null);
         }
+
 
         if ($this->search) {
             $content_folder = $folder->contents()

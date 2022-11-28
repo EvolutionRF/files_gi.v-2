@@ -118,12 +118,44 @@ class FilesController extends Controller
         }
     }
 
+    public function showUpdate($slug)
+    {
+        $content = Content::where('slug', $slug)->first();
+
+        if ($content->type == 'url') {
+            $url = route('url.storeupdate', $slug);
+        } else {
+            $url = route('file.storeupdate', $slug);
+        }
+
+        $data = [
+            'url' => $url,
+            'content' => $content
+        ];
+
+        return view('file.update-file', $data);
+    }
+
+    public function storeUpdate($slug, Request $request, SweetAlertFactory $flasher)
+    {
+        $content = Content::where('slug', $slug)->first();
+        $route = route('EnterFolder', $content->contentable->slug);
+        if ($request->hasFile('file')) {
+            $content->clearMediaCollection('file');
+            $done =  $content->addMediaFromRequest('file')->toMediaCollection('file');
+            if ($done) {
+                activity()->causedBy(auth()->user())->performedOn($content)->log('Update Link');
+                $flasher->addSuccess('File has been Updated successfully!');
+                return redirect($route);
+            }
+        }
+    }
+
     public function showDetail($slug)
     {
 
         // return response()->json($slug);
         $file = Content::where('slug', $slug)->withTrashed()->first();
-
 
         $data = [
             'file' => $file

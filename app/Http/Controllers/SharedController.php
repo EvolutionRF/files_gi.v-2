@@ -23,8 +23,6 @@ class SharedController extends Controller
     public function index()
     {
 
-
-
         $data = [
             'type_menu' => 'Shared',
         ];
