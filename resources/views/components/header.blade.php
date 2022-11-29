@@ -22,11 +22,15 @@
                 <div class="d-sm-none d-lg-inline-block">{{ auth()->user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="features-profile.html" class="dropdown-item has-icon">
+                <a href="{{ route('user.editprofile') }}" class="dropdown-item has-icon" data-toggle="modal"
+                    data-target=".show-modal" data-title="Edit Profile" data-url="{{ route('user.editprofile') }}">
                     <i class="far fa-user"></i> Profile
                 </a>
-                <a href="features-activities.html" class="dropdown-item has-icon">
-                    <i class="fas fa-bolt"></i> Activities
+                <a href="features-activities.html" class="dropdown-item has-icon" data-toggle="modal"
+                    data-target=".show-modal" data-title="Change Password"
+                    data-url="{{ route('user.changepassword') }}">
+                    <x-heroicon-o-shield-exclamation style="height: 15px"></x-heroicon-o-shield-exclamation> Change
+                    Password
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault();

@@ -8,6 +8,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SharedController;
 use App\Http\Controllers\TrashController;
 use App\Http\Controllers\URLController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -128,4 +129,12 @@ Route::controller(NotificationController::class)->prefix('notification')->group(
 Route::controller(SharedController::class)->prefix('shared')->group(function () {
 
     Route::get('/', 'index')->name('shared.index');
+});
+
+Route::controller(UserController::class)->prefix('user')->group(function () {
+    Route::get('/profile', 'editProfile')->name('user.editprofile');
+    Route::put('/profile/{id}', 'storeEditProfile')->name('user.storeeditprofile');
+
+    Route::get('/password', 'changePassword')->name('user.changepassword');
+    Route::put('/password/{id}', 'storeChangePassword')->name('user.storechangepassword');
 });
