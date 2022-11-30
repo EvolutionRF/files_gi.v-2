@@ -50,13 +50,14 @@
         <div class="form-group">
             <h6>User with Access</h6>
             @foreach($have_access as $haveAccess)
+            <input type="text" hidden value="{{ $haveAccess->id }}" name="idaccess-{{ $haveAccess->id }}">
             <div class="border rounded p-1 pl-2 pr-2 d-flex justify-content-between mb-1" style="height: 40px">
                 <div class="d-flex justify-align-center">
                     <p class="m-0 mr-2 my-auto">🔘</p>
                     <p class="my-auto">{{ $haveAccess->user->name }}</p>
                 </div>
                 <div class="d-flex justify-align-center">
-                    <select class="form-control-sm border-0" name="userpermission">
+                    <select class="form-control-sm border-0" name="userpermission-{{ $haveAccess->id }}">
                         @foreach($permissions as $permission)
                         <option value="{{ $permission->id }}" {{ ($haveAccess->permission_id ==
                             $permission->id)?'selected':'' }}>{{ $permission->name }}</option>

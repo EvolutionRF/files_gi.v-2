@@ -364,7 +364,9 @@ class FoldersController extends Controller
 
     public function storeManage(Request $request, $slug, SweetAlertFactory $flasher)
     {
-        return response()->json($request);
+        // return response()->json($request);
+
+
 
         $dataAcccess = [
             'permission_id' => $request->accessType,
@@ -376,24 +378,46 @@ class FoldersController extends Controller
         $folder = BaseFolder::where('slug', $slug)->first();
         $route = route('dashboard');
 
+        // foreach ($ as $key => $value) {
+        //     # code...
+        // }
+
         if (!$folder) {
             $folder = Content::where('slug', $slug)->first();
             $route = route('EnterFolder', $folder->contentable->slug);
             $dataAcccess['content_id'] = $folder->id;
             if ($request->isPrivate == 'public') {
-                ContentAccess::where('content_id', $folder->id)->delete();
+                ContentAccess::where('content_id', $folder->id)->forceDelete();
             } else {
                 if ($request->invitedUser) {
                     ContentAccess::create($dataAcccess);
+                }
+
+                // return response()->json($folder->access->last());
+                foreach ($folder->access as $data) {
+                    if ($request->input('userpermission-' . $data->id) != $data->permission_id && $data != $folder->access->last()) {
+                        $data->update([
+                            'permission_id' => $request->input('userpermission-' . $data->id)
+                        ]);
+                        // return response()->json($data);
+                    }
                 }
             }
         } else {
             $dataAcccess['basefolder_id'] = $folder->id;
             if ($request->isPrivate == 'public') {
-                BaseFolderAccess::where('basefolder_id', $folder->id)->delete();
+                BaseFolderAccess::where('basefolder_id', $folder->id)->forceDelete();
             } else {
                 if ($request->invitedUser) {
                     BaseFolderAccess::create($dataAcccess);
+                }
+
+                foreach ($folder->base_folders_accesses as $data) {
+                    if ($request->input('userpermission-' . $data->id) != $data->permission_id && $data != $folder->base_folders_accesses->last()) {
+                        $data->update([
+                            'permission_id' => $request->input('userpermission-' . $data->id)
+                        ]);
+                    }
                 }
             }
         }
