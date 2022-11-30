@@ -49,7 +49,6 @@ class UserController extends Controller
         $data = [
             'url' => route('user.storechangepassword', $user->id)
         ];
-        // return response()->json('masuk');
         return view('user.change-password', $data);
     }
 

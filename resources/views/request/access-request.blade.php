@@ -8,11 +8,11 @@
             @csrf
             <select name="permission">
                 @foreach ($permissions as $permission)
-                    <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                <option value="{{ $permission->id }}">{{ $permission->name }}</option>
                 @endforeach
             </select>
             <div class="mt-5">
-                <button type="button" class="btn btn-primary">Request Access</button>
+                <button type="submit" class="btn btn-primary">Request Access</button>
             </div>
         </form>
     </div>

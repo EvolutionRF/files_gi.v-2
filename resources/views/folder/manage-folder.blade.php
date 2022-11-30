@@ -56,7 +56,7 @@
                     <p class="my-auto">{{ $haveAccess->user->name }}</p>
                 </div>
                 <div class="d-flex justify-align-center">
-                    <select class="form-control-sm border-0">
+                    <select class="form-control-sm border-0" name="userpermission">
                         @foreach($permissions as $permission)
                         <option value="{{ $permission->id }}" {{ ($haveAccess->permission_id ==
                             $permission->id)?'selected':'' }}>{{ $permission->name }}</option>

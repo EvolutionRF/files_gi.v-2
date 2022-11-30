@@ -161,7 +161,7 @@ class FoldersController extends Controller
                                 }
                             }
                             $data['url'] = route('request.store', $slug);
-                            return view('request.access-request', $data);;
+                            return view('request.access-request', $data);
                         }
                     }
                 }
@@ -364,6 +364,8 @@ class FoldersController extends Controller
 
     public function storeManage(Request $request, $slug, SweetAlertFactory $flasher)
     {
+        return response()->json($request);
+
         $dataAcccess = [
             'permission_id' => $request->accessType,
             'user_id' => $request->invitedUser,

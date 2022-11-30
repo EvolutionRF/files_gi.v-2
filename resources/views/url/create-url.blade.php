@@ -63,7 +63,7 @@
 <script>
     $(document).ready(function () {
         const privateForm = document.querySelector('#formFilePrivate');
-        $('[name=FileisPrivate]').change(function() {
+        $('[name=isPrivate]').change(function() {
             if (this.value == 'private') {
                 privateForm.style.display = 'block';
             } else {

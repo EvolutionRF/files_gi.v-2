@@ -284,9 +284,37 @@ class FilesController extends Controller
         $file = Content::where('slug', $slug)->first();
         $data = [
             'file' => $file,
-            // 'media' => $media
         ];
-        return view('file.download-file', $data);
+        if (auth()->user()) {
+            if (auth()->user()->getRoleNames()->first() == "admin") {
+                return view('file.download-file', $data);
+            } else {
+                if ($file->isPrivate == 'public') {
+                    return view('file.download-file', $data);
+                } else {
+                    if ($file->baseFolder != "") {
+                        if (auth()->user()->id == $file->baseFolder->owner_id) {
+                            return view('file.download-file', $data);
+                        }
+                    }
+                    if (auth()->user()->id == $file->owner_id) {
+                        return view('file.download-file', $data);
+                    } else {
+                        if ($file->access) {
+                            foreach ($file->access as $access) {
+                                if (auth()->user()->id == $access->user_id && $access->status == 'accept') {
+                                    return view('file.download-file', $data);
+                                }
+                            }
+                        }
+                        return redirect()->route('request', $file->slug);
+                    }
+                }
+            }
+        } else {
+            // $flasher->addError('You Dont have access');
+            return redirect()->route('request', $file->slug);
+        }
     }
 
     public function downloadFile($slug)

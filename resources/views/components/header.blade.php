@@ -24,7 +24,8 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="{{ route('user.editprofile') }}" class="dropdown-item has-icon" data-toggle="modal"
                     data-target=".show-modal" data-title="Edit Profile" data-url="{{ route('user.editprofile') }}">
-                    <i class="far fa-user"></i> Profile
+                    <x-heroicon-o-pencil-square style="height: 15px">
+                    </x-heroicon-o-pencil-square> Edit Profile
                 </a>
                 <a href="features-activities.html" class="dropdown-item has-icon" data-toggle="modal"
                     data-target=".show-modal" data-title="Change Password"

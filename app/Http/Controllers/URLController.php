@@ -97,18 +97,51 @@ class URLController extends Controller
             'url' => $url
         ];
 
+
         return view('url.detail-url', $data);
     }
 
 
-    public function showURL($slug)
+    public function showURL($slug, SweetAlertFactory $flasher)
     {
         $url = Content::where('slug', $slug)->first();
 
-        // return response()->json($slug);
         $data = [
             'Url' => $url,
         ];
+        // dd($disini)
+        // return response()->json('sini');
+        if (auth()->user()) {
+            if (auth()->user()->getRoleNames()->first() == "admin") {
+                return view('url.show-url', $data);
+            } else {
+                if ($url->isPrivate == 'public') {
+                    return view('url.show-url', $data);
+                } else {
+                    if ($url->baseFolder != "") {
+                        if (auth()->user()->id == $url->baseFolder->owner_id) {
+                            return view('url.show-url', $data);
+                        }
+                    }
+                    if (auth()->user()->id == $url->owner_id) {
+                        return view('url.show-url', $data);
+                    } else {
+                        if ($url->access) {
+                            foreach ($url->access as $access) {
+                                if (auth()->user()->id == $access->user_id && $access->status == 'accept') {
+                                    return view('url.show-url', $data);
+                                }
+                            }
+                        }
+                        // $flasher->addError('You Dont have access');
+                        return redirect()->route('request', $url->slug);
+                    }
+                }
+            }
+        } else {
+            // $flasher->addError('You Dont have access');
+            return redirect()->route('request', $url->slug);
+        }
 
         return view('url.show-url', $data);
     }
