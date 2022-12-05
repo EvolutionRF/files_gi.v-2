@@ -113,11 +113,13 @@ class FoldersController extends Controller
     public function showActivity($slug)
     {
         $folder = BaseFolder::where('slug', $slug)->first();
+        $folder_activity = Activity::where('subject_type', 'App\Models\BaseFolder')->where('subject_id', $folder->id)->latest()->get();
+
         if (!$folder) {
             $folder = Content::where('slug', $slug)->first();
+            $folder_activity = Activity::where('subject_type', 'App\Models\Content')->where('subject_id', $folder->id)->latest()->get();
         }
 
-        $folder_activity = Activity::where('subject_type', 'App\Models\BaseFolder')->where('subject_id', $folder->id)->latest()->get();
 
 
         $data = [
