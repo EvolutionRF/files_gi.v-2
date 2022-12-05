@@ -33,6 +33,7 @@
                 {{ $baseFolders->links() }}
 
                 {{-- <livewire:base-folder></livewire:base-folder> --}}
+
             </div>
 
         </section>

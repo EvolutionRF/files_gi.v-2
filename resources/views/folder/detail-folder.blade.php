@@ -1,16 +1,10 @@
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="details-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details"
-            aria-selected="true">Details</a>
-    </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+<div class="tab-content" id="side">
+    <div class="tab-pane fade show active tab-custome" role="tabpanel">
         <div class="card-body d-flex">
             <x-heroicon-s-folder-open style="width:15px" />
             <p class="my-auto pl-2">{{ $folder->name }}</p>
         </div>
-        <div class="details">
+        <div class="detail">
             <h6>Folder Properties</h6>
             <div class="col-12 p-0">
                 <div class="d-flex justify-content-between p-0">

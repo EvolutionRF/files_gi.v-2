@@ -47,6 +47,7 @@
 
 <livewire:home-index />
 
+<!-- Nav tabs -->
 
 @endsection
 

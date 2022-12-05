@@ -61,6 +61,7 @@ Route::controller(FoldersController::class)->prefix('folders')->group(function (
     Route::get('/{slug}', 'EnterFolder')->name('EnterFolder');
 
     Route::get('/show/{slug}', 'showDetail')->name('folder.show');
+    Route::get('/activity/{slug}', 'showActivity')->name('folder.activity');
 
     Route::get('/rename/{slug}', 'showRename')->name('folder.rename');
     Route::PUT('/storerename/{slug}', 'storeRename')->name('folder.storerename');

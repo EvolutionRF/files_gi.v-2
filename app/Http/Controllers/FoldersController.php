@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity;
 
 class FoldersController extends Controller
 {
@@ -107,6 +108,24 @@ class FoldersController extends Controller
         ];
 
         return view('folder.detail-folder', $data);
+    }
+
+    public function showActivity($slug)
+    {
+        $folder = BaseFolder::where('slug', $slug)->first();
+        if (!$folder) {
+            $folder = Content::where('slug', $slug)->first();
+        }
+
+        $folder_activity = Activity::where('subject_type', 'App\Models\BaseFolder')->where('subject_id', $folder->id)->latest()->get();
+
+
+        $data = [
+            'folder_activity' => $folder_activity,
+            'folder' => $folder
+        ];
+        // return response()->json($folder_activity);
+        return view('folder.activity-folder', $data);
     }
 
 

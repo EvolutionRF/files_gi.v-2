@@ -22,9 +22,10 @@
                                     <x-heroicon-s-ellipsis-vertical style="width:15px" />
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right ml-0">
-                                    <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
-                                        data-target=".right_modal" data-title="Detail Folder "
-                                        data-url="{{ route('folder.show', $baseFolder->slug) }}">
+                                    <a type="button" class="dropdown-item has-icon pl-2" id="detail-button"
+                                        data-toggle="modal" data-target=".right_modal" data-title="Detail Folder "
+                                        data-url="{{ route('folder.show', $baseFolder->slug) }}"
+                                        data-route="{{ route('folder.activity',$baseFolder->slug) }}">
                                         <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
                                         Detail
                                     </a>

@@ -83,8 +83,14 @@
                 var url = button.data('url');
 
                 modal.find(".modal-title-custom").html(title);
-                modal.find(".modal-body-custom").load(url);
+                modal.find(".detail-body").load(url);
             });
+
+            $(".right_modal").on("hide.bs.modal", (event) => {
+                console.log('rest');
+            });
+
+
 
             $(".notification").on("show.bs.dropdown", (event) => {
                 var button = $(event.relatedTarget);
@@ -94,7 +100,20 @@
             });
 
 
+
+
         });
+
+            $('.dropdown-item').click(function(){
+                // var data = "";
+                data = $(this).attr('data-route');
+                $('#activity-tab2').on("show.bs.tab",(event)=>{
+                    var tab = $("#activity");
+                    // console.log(data);
+                    tab.load(data);
+                });
+            });
+
 
 
     </script>
