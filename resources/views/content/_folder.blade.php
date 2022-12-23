@@ -29,6 +29,7 @@
                                         <x-heroicon-s-information-circle style="width:15px" class="ml-0" />
                                         Detail
                                     </a>
+
                                     @if($content->owner_id == auth()->user()->id)
                                     <a type="button" class="dropdown-item has-icon pl-2" data-toggle="modal"
                                         data-target=".show-modal" data-title="Manage Folder {{ $content->name }}"

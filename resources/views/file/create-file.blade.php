@@ -7,8 +7,8 @@
     </div>
     <div class="form-group">
         <div class="custom-file">
-            <input type="file" class="custom-file-input" id="customFile" name="file">
-            <label class="custom-file-label" for="customFile">Upload File</label>
+            <input type="file" class="file-input" id="customFile" name="file">
+            {{-- <label class="custom-file-label" for="customFile">Upload File</label> --}}
         </div>
     </div>
     <div class="access-radio mt-2">
