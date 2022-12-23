@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-center my-auto mr-2">
+        <div class="text-center my-auto mr-2 col-sm-2">
             <x-heroicon-s-document style="width:25px" class="ml-0" />
         </div>
     </div>
